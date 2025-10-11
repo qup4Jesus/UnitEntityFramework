@@ -1,7 +1,7 @@
 ﻿
 namespace UnitEntityFramework.DAL.Model
 {
-    public class User
+    public class User : Table
     {
         public int Id { get; set; }
         public string Name { get; set; }
