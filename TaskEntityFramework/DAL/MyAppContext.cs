@@ -14,6 +14,12 @@ namespace TaskEntityFramework.DAL
             Database.EnsureCreated();
         }
 
+        public MyAppContext(string text)
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=PC-GAMEROCK\SQLEXPRESS;Database=Library;Trusted_Connection=true;TrustServerCertificate=true;");
