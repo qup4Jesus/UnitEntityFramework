@@ -14,18 +14,19 @@ namespace UnitEntityFramework.BLL.Management
             _manager = new UserRepository();
         }
 
-        public void Add(string name, string email)
+        public void Add(List<User> users)
         {
-            if (String.IsNullOrEmpty(name))
-                throw new ArgumentNullException();
-            if (String.IsNullOrEmpty(email))
-                throw new ArgumentNullException();
-            if (!new EmailAddressAttribute().IsValid(email))
-                throw new ArgumentNullException();
-
-            List<User> newUser = new List<User> { new User { Name = name, Email = email } };
-
-            _manager.Add(newUser);
+            foreach (var user in users)
+            {
+                if (String.IsNullOrEmpty(user.Name))
+                    throw new ArgumentNullException();
+                if (String.IsNullOrEmpty(user.Email))
+                    throw new ArgumentNullException();
+                if (!new EmailAddressAttribute().IsValid(user.Email))
+                    throw new ArgumentNullException();
+            }
+            
+            _manager.Add(users);
         }
 
         public List<User> ReadAll()

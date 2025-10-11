@@ -13,14 +13,15 @@ namespace UnitEntityFramework.BLL.Management
             _manager = new CompanyRepository();
         }
 
-        public void Add(string name, string value = "0")
+        public void Add(List<Company> companies)
         {
-            if (String.IsNullOrEmpty(name))
-                throw new ArgumentNullException();
+            foreach (var company in companies)
+            {
+                if (String.IsNullOrEmpty(company.Name))
+                    throw new ArgumentNullException();
+            }
 
-            List<Company> newCompany = new List<Company> { new Company { Name = name } };
-
-            _manager.Add(newCompany);
+            _manager.Add(companies);
         }
 
         public void Delete(int id)

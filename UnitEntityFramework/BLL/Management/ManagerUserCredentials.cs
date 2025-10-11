@@ -13,20 +13,21 @@ namespace UnitEntityFramework.BLL.Management
             _manager = new UserCredentialsRepository();
         }
 
-        public void Add(string login, string password)
+        public void Add(List<UserCredentials> userCredentials)
         {
-            if (String.IsNullOrEmpty(login))
-                throw new ArgumentNullException();
-            if (login.Length < 3)
-                throw new ArgumentNullException();
-            if (String.IsNullOrEmpty(password))
-                throw new ArgumentNullException();
-            if (password.Length < 8)
-                throw new ArgumentNullException();
+            foreach (var user in userCredentials)
+            {
+                if (String.IsNullOrEmpty(user.Login))
+                    throw new ArgumentNullException();
+                if (user.Login.Length < 3)
+                    throw new ArgumentNullException();
+                if (String.IsNullOrEmpty(user.Password))
+                    throw new ArgumentNullException();
+                if (user.Password.Length < 8)
+                    throw new ArgumentNullException();
+            }
 
-            List<UserCredentials> newUser = new List<UserCredentials> { new UserCredentials { Login = login, Password = password} };
-
-            _manager.Add(newUser);
+            _manager.Add(userCredentials);
         }
 
         public void Delete(int id)
