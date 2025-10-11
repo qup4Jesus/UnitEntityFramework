@@ -8,9 +8,13 @@ namespace UnitEntityFramework.DAL
     {
         // Объекты таблицы Users
         public DbSet<User> Users { get; set; }
+        
+        // Объекты таблицы Company
+        public DbSet<Company> Companies { get; set; }
 
-        // Объекты таблицы Companies
-        public DbSet<Company> Companies { get; set;}
+        // Объекты таблицы UserCredentials
+        public DbSet<UserCredentials> UserCredentials { get; set;}
+
         public MyAppContext()
         {
             Database.EnsureDeleted();
