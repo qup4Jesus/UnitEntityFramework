@@ -8,9 +8,9 @@ namespace UnitEntityFramework.BLL.Management
     {
         private CompanyRepository _manager;
 
-        public ManagerCompany(CompanyRepository repository)
+        public ManagerCompany()
         {
-            _manager = repository;
+            _manager = new CompanyRepository();
         }
 
         public void Add(string name, string value = "0")

@@ -1,7 +1,7 @@
 ﻿
 namespace UnitEntityFramework.DAL.Model
 {
-    internal abstract class Table 
+    public abstract class Table 
     {
         public string Name;
         public string? Email;

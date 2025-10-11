@@ -9,9 +9,9 @@ namespace UnitEntityFramework.BLL.Management
     {
         private UserRepository _manager;
 
-        public ManagerUser(UserRepository repository)
+        public ManagerUser()
         {
-            _manager = repository;
+            _manager = new UserRepository();
         }
 
         public void Add(string name, string email)
