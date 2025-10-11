@@ -1,0 +1,93 @@
+﻿
+using TaskEntityFramework.BLL.Management;
+using TaskEntityFramework.DAL.Model;
+using TaskEntityFramework.PLL.Helpers;
+
+namespace TaskEntityFramework.PLL.View
+{
+    internal class ReadView<T> where T : Table
+    {
+        private IManager<T> _manager;
+
+        public ReadView(IManager<T> manager)
+        {
+            _manager = manager;
+        }
+
+        public void Show()
+        {
+            while (true)
+            {
+                SuccessMessages.Show("Просмотр записей");
+
+                Console.WriteLine("Выберите показ пользователей : \n" +
+                    "1 - Показать все записи\n" +
+                    "2 - Показать конкретную запись по ID");
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        ShowAllRecords();
+                        break;
+                    case "2":
+                        ShowRecordById();
+                        break;
+                    default:
+                        AlertMessages.Show("Введено не корректное значение!");
+                        break;
+                }
+
+                Console.WriteLine("Нажмите любую клавишу, чтобы продолжить...");
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+
+        private void ShowAllRecords()
+        {
+            List<T> listElem = _manager.ReadAll();
+
+            foreach (T item in listElem)
+            {
+                if (item is User user)
+                {
+                    Console.WriteLine(
+                        $"Имя пользователя: {user.Name}\n" +
+                        $"Email пользователя: {user.Email}\n");
+                }
+                else if (item is Book book)
+                {
+                    Console.WriteLine(
+                        $"Название книги: {book.Name}\n" +
+                        $"Дата выхода: {book.ReleaseDate}\n");
+                }
+            }
+        }
+
+        private void ShowRecordById()
+        {
+            Console.Write("Введите id: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                T record = _manager.ReadOne(id);
+
+                if (record is User user)
+                {
+                    Console.WriteLine(
+                        $"Имя пользователя: {user.Name}\n" +
+                        $"Email пользователя: {user.Email}");
+                }
+                else if (record is Book book)
+                {
+                    Console.WriteLine(
+                        $"Название книги: {book.Name}\n" +
+                        $"Дата выхода: {book.ReleaseDate}");
+                }
+            }
+            else
+            {
+                AlertMessages.Show("Неверный формат ID!");
+            }
+        }
+    }
+}
