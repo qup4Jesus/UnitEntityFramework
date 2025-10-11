@@ -13,7 +13,7 @@ namespace UnitEntityFramework.DAL.Repositories
             {
                 // Добавление одной компании, для добавление нескольких
                 // компаний используем AddRange(element1, ... ,element54);
-                _db.Add(newElements);
+                _db.AddRange(newElements);
 
                 _db.SaveChanges();
             }
