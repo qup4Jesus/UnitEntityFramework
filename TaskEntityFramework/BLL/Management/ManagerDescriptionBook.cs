@@ -1,32 +1,42 @@
 ﻿
-using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Repositories;
+using TaskEntityFramework.DAL.Model;
 
 namespace TaskEntityFramework.BLL.Management
 {
-    internal class ManagerBook : IManager<Book>
+    internal class ManagerDescriptionBook : IManager<DescriptionBook>
     {
-        private BookRepository _manager;
+        private DescriptionBookRepository _manager;
 
-        public ManagerBook(BookRepository repository)
+        public ManagerDescriptionBook(DescriptionBookRepository manager)
         {
-            _manager = repository;
+            _manager = manager;
         }
 
-        public void Add(List<Book> books)
+        public void Add(List<DescriptionBook> listElements)
         {
-            foreach (var book in books)
+            foreach (var book in listElements)
             {
-                if (String.IsNullOrEmpty(book.Name))
+                if (String.IsNullOrEmpty(book.Description))
                     throw new ArgumentNullException();
-                if (!(book.ReleaseDate is DateTime))
+                if (String.IsNullOrEmpty(book.Genre))
                     throw new ArgumentNullException();
             }
 
-            _manager.Add(books);
+            _manager.Add(listElements);
         }
 
-        public List<Book> ReadAll()
+        public void Delete(int id)
+        {
+            var book = _manager.ReadOne(id);
+
+            if (book is null)
+                throw new ArgumentNullException();
+
+            _manager.Delete(id);
+        }
+
+        public List<DescriptionBook> ReadAll()
         {
             var books = _manager.ReadAll();
 
@@ -36,7 +46,7 @@ namespace TaskEntityFramework.BLL.Management
             return books;
         }
 
-        public Book ReadOne(int id)
+        public DescriptionBook ReadOne(int id)
         {
             var book = _manager.ReadOne(id);
 
@@ -54,27 +64,14 @@ namespace TaskEntityFramework.BLL.Management
                 throw new ArgumentNullException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(book.Name))
+            if (nameColumn != nameof(book.Description))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(book.ReleaseDate))
+            if (nameColumn != nameof(book.Genre))
                 throw new ArgumentNullException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
-            if (nameColumn == nameof(book.ReleaseDate))
-                if (!DateOnly.TryParse(value, out DateOnly result))
-                    throw new ArgumentNullException();
 
             _manager.Update(id, nameColumn, value);
-        }
-
-        public void Delete(int id)
-        {
-            var book = _manager.ReadOne(id);
-
-            if (book is null)
-                throw new ArgumentNullException();
-
-            _manager.Delete(id);
         }
     }
 }

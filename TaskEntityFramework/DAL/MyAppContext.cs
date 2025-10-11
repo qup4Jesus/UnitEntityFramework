@@ -8,6 +8,8 @@ namespace TaskEntityFramework.DAL
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<DescriptionBook> DescriptionBooks { get; set;}
+        public DbSet<Author> Author { get; set; }
 
         public MyAppContext()
         {
