@@ -46,7 +46,7 @@ namespace TaskEntityFramework.DAL.Repositories
             }
         }
 
-        public User ReadOne(int id)
+        public override User ReadOne(int id)
         {
             using (_db)
             {
