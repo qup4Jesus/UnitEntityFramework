@@ -1,4 +1,5 @@
 ﻿
+using TaskEntityFramework.BLL.Entities;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Repositories;
 
@@ -7,10 +8,11 @@ namespace TaskEntityFramework.BLL.Management
     internal class ManagerAuthor : IManager<Author>
     {
         private AuthorRepository _manager;
-
-        public ManagerAuthor(AuthorRepository manager)
+        private AuthorFactory _factory;
+        public ManagerAuthor()
         {
-            _manager = manager;
+            _manager = new AuthorRepository();
+            _factory = new AuthorFactory();
         }
 
         public void Add(List<Author> listElements)
@@ -76,6 +78,11 @@ namespace TaskEntityFramework.BLL.Management
                 throw new ArgumentNullException();
 
             _manager.Update(id, nameColumn, value);
+        }
+
+        public IEntityFactory<Author> GetFactory()
+        {
+            return _factory;
         }
     }
 }

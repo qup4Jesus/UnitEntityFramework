@@ -1,4 +1,5 @@
 ﻿
+using TaskEntityFramework.BLL.Entities;
 using TaskEntityFramework.DAL.Model;
 
 namespace TaskEntityFramework.BLL.Management
@@ -11,5 +12,6 @@ namespace TaskEntityFramework.BLL.Management
         public void Update(int id, string nameColumn, string value);
         public void Delete(int id);
 
+        public IEntityFactory<T> GetFactory();
     }
 }

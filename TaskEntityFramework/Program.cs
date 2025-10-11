@@ -1,12 +1,14 @@
 ﻿
 using TaskEntityFramework.BLL.Management;
-using TaskEntityFramework.DAL.Repositories;
+using TaskEntityFramework.DAL;
 using TaskEntityFramework.PLL.View;
 
-var books = new ManagerBook(new BookRepository());
-var users = new ManagerUser(new UserRepository());
+var books = new ManagerBook();
+var users = new ManagerUser();
+var description = new ManagerDescriptionBook();
+var author = new ManagerAuthor();
 
-var start = new MainMenuView(books, users);
+var start = new MainMenuView(books, users, description, author);
 
 while (true)
 {
@@ -19,4 +21,5 @@ while (true)
 
     }
 }
+
 

@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using TaskEntityFramework.BLL.Entities;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Repositories;
 
@@ -8,10 +9,11 @@ namespace TaskEntityFramework.BLL.Management
     internal class ManagerUser : IManager<User>
     {
         private UserRepository _manager;
-
-        public ManagerUser(UserRepository repository)
+        private UserFactory _factory;
+        public ManagerUser()
         {
-            _manager = repository;
+            _manager = new UserRepository();
+            _factory = new UserFactory();
         }
 
         public void Add(List<User> users)
@@ -78,6 +80,11 @@ namespace TaskEntityFramework.BLL.Management
                 throw new ArgumentNullException();
 
             _manager.Delete(id);
+        }
+
+        public IEntityFactory<User> GetFactory()
+        {
+            return _factory;
         }
     }
 }

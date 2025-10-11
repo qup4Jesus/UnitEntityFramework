@@ -1,16 +1,18 @@
 ﻿
-using TaskEntityFramework.DAL.Repositories;
+using TaskEntityFramework.BLL.Entities;
 using TaskEntityFramework.DAL.Model;
+using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
     internal class ManagerDescriptionBook : IManager<DescriptionBook>
     {
         private DescriptionBookRepository _manager;
-
-        public ManagerDescriptionBook(DescriptionBookRepository manager)
+        private DescriptionBookFactory _factory;
+        public ManagerDescriptionBook()
         {
-            _manager = manager;
+            _manager = new DescriptionBookRepository();
+            _factory = new DescriptionBookFactory();
         }
 
         public void Add(List<DescriptionBook> listElements)
@@ -72,6 +74,11 @@ namespace TaskEntityFramework.BLL.Management
                 throw new ArgumentNullException();
 
             _manager.Update(id, nameColumn, value);
+        }
+
+        public IEntityFactory<DescriptionBook> GetFactory()
+        {
+            return _factory;
         }
     }
 }

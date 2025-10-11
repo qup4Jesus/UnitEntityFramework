@@ -9,8 +9,10 @@ namespace TaskEntityFramework.DAL.Model
 
         // Внешний ключ
         public int UserId { get; set; }
+        public int DescriptionBookId { get; set; }
 
         // Навигационное свойство
+        public DescriptionBook DescriptionBook { get; set; }
         public User User { get; set; }
     }
 }
