@@ -13,18 +13,17 @@ namespace TaskEntityFramework.BLL.Management
             _manager = repository;
         }
 
-        public void Add(string name, string date)
+        public void Add(List<Book> books)
         {
-            if (String.IsNullOrEmpty(name))
-                throw new ArgumentNullException();
-            if (String.IsNullOrEmpty(date))
-                throw new ArgumentNullException();
-            if (!DateOnly.TryParse(date, out DateOnly result))
-                throw new ArgumentNullException();
+            foreach (var book in books)
+            {
+                if (String.IsNullOrEmpty(book.Name))
+                    throw new ArgumentNullException();
+                if (!(book.ReleaseDate is DateTime))
+                    throw new ArgumentNullException();
+            }
 
-            List<Book> newBook = new List<Book> { new Book { Name = name, ReleaseDate = DateTime.Parse(date) } };
-
-            _manager.Add(newBook);
+            _manager.Add(books);
         }
 
         public List<Book> ReadAll()
