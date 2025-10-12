@@ -15,12 +15,6 @@ namespace UnitEntityFramework.DAL
         // Объекты таблицы UserCredentials
         public DbSet<UserCredentials> UserCredentials { get; set;}
 
-        public MyAppContext()
-        {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=PC-GAMEROCK\SQLEXPRESS;Database=EF;Trusted_Connection=true;TrustServerCertificate=True;");
