@@ -16,7 +16,7 @@ namespace TaskEntityFramework.DAL
             Database.EnsureCreated();
         }
 
-        public MyAppContext(string text)
+        public MyAppContext(string writeUpdateBase)
         {
             Database.EnsureDeleted();
             Database.EnsureCreated();

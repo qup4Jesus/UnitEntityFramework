@@ -1,13 +1,10 @@
 ﻿
-using UnitEntityFramework.DAL.Model;
-using UnitEntityFramework.DAL.Model.DTO;
+using TaskEntityFramework.DAL.Model;
 
-namespace UnitEntityFramework.DAL.SQLRequest
+namespace TaskEntityFramework.DAL.SQLRequests
 {
-    internal class UserRequest : Requests<User, UserCompanyDto>
+    internal class UserRequest : Requests<User, User>
     {
-        public UserRequest() : base() { }
-
         public override List<User> Find(int whereValue)
         {
             using (_db)
@@ -37,20 +34,12 @@ namespace UnitEntityFramework.DAL.SQLRequest
             using (_db)
             {
                 return _db.Users.First();
-            }  
+            }
         }
 
-        public override List<UserCompanyDto> Join(Table table)
+        public override List<User> Join()
         {
-            using (_db)
-            {
-                return _db.Users
-                    .Join(_db.Companies,
-                        c => c.CompanyId,
-                        u => u.Id,
-                        (u, c) => new UserCompanyDto { CompanyName = c.Name }).ToList();
-
-            }
+            return null;
         }
 
         public override int Sum()
@@ -59,6 +48,7 @@ namespace UnitEntityFramework.DAL.SQLRequest
             {
                 return _db.Users.Sum(u => u.Id);
             }
+
         }
     }
 }
