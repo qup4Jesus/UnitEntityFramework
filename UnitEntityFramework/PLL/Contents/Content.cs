@@ -22,10 +22,10 @@ namespace UnitEntityFramework.PLL.Contents
             _managerCompany.Add(
                 new List<Company>
                     {
-                        new Company { Name = "Google" },
-                        new Company { Name = "Mail" },
-                        new Company { Name = "Yandex" },
-                        new Company { Name = "Yahoo" },
+                        new Company { Name = "Google", City = "Петропавловск" },
+                        new Company { Name = "Mail", City = "Майами" },
+                        new Company { Name = "Yandex", City = "Нигерия" },
+                        new Company { Name = "Yahoo", City = "Яху" },
                     });
 
             _managerUser.Add(

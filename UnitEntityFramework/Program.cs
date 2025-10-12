@@ -16,8 +16,6 @@ using (var db = new MyAppContext())
 
     // Заполняем данными
     new Content(managerCompany, managerUser, managerUserCredentials).GetContent();
-
-
 }
 
 
