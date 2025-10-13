@@ -6,12 +6,14 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class AddView<T> where T : Table
+    internal class AddView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     {
-        private IManager<T> _manager;
-        private IEntityFactory<T> _factory;
+        private IManager<TEntity, TDto> _manager;
+        private IEntityFactory<TEntity> _factory;
 
-        public AddView(IManager<T> manager, IEntityFactory<T> factory)
+        public AddView(IManager<TEntity, TDto> manager, IEntityFactory<TEntity> factory)
         {
             _manager = manager;
             _factory = factory;
@@ -25,7 +27,7 @@ namespace TaskEntityFramework.PLL.View
 
             switch (_manager)
             {
-                case ManagerUser managerUser:
+                case UserManager managerUser:
 
                     Console.Write("Введите имя : ");
                     string name = Console.ReadLine();
@@ -35,11 +37,11 @@ namespace TaskEntityFramework.PLL.View
 
                     var listElements = new List<string> { name, email };
 
-                    T newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    TEntity newItem = _factory.CreateFromUserInput(listElements);
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerBook managerBook:
+                case BookManager managerBook:
 
                     Console.Write("Введите название : ");
                     string title = Console.ReadLine();
@@ -50,10 +52,10 @@ namespace TaskEntityFramework.PLL.View
                     listElements = new List<string> { title, dateRelease };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerDescriptionBook managerDescriptionBook:
+                case DescriptionBookManager managerDescriptionBook:
 
                     Console.Write("Введите описание книги : ");
                     string description = Console.ReadLine();
@@ -64,10 +66,10 @@ namespace TaskEntityFramework.PLL.View
                     listElements = new List<string> { description, genre };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerAuthor managerAuthor:
+                case AuthorManager managerAuthor:
 
                     Console.Write("Введите имя автора : ");
                     name = Console.ReadLine();
@@ -81,7 +83,7 @@ namespace TaskEntityFramework.PLL.View
                     listElements = new List<string> { name, dateBirth, dateDeath };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
                 default:

@@ -6,12 +6,14 @@ using TaskEntityFramework.BLL.Entities;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class ChoiceTableView<T> where T : Table
+    internal class ChoiceTableView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     {
-        private IManager<T> _manager;
-        private IEntityFactory<T> _entityFactory;
+        private IManager<TEntity, TDto> _manager;
+        private IEntityFactory<TEntity> _entityFactory;
 
-        public ChoiceTableView(IManager<T> manager)
+        public ChoiceTableView(IManager<TEntity, TDto> manager)
         {
             _manager = manager;
             _entityFactory = _manager.GetFactory();
@@ -21,8 +23,10 @@ namespace TaskEntityFramework.PLL.View
         {
             while (true)
             {
+                Console.Clear();
+
                 Console.WriteLine(
-                    "Выберите любую из команд: \n" +
+                    "Выберите любую из команд : \n" +
                     $"{nameof(Commands.create)} : добавить элемент в таблицу\n" +
                     $"{nameof(Commands.read)} : просмотреть пользователей\n" +
                     $"{nameof(Commands.update)} : обновить пользователя\n" +
@@ -31,16 +35,16 @@ namespace TaskEntityFramework.PLL.View
                 switch (Console.ReadLine())
                 {
                     case nameof(Commands.create):
-                        new AddView<T>(_manager, _entityFactory).Show();
+                        new AddView<TEntity>(_manager, _entityFactory).Show();
                         break;
                     case nameof(Commands.read):
-                        new ReadView<T>(_manager).Show();
+                        new ReadView<TEntity>(_manager).Show();
                         break;
                     case nameof(Commands.update):
-                        new UpdateView<T>(_manager).Show();
+                        new UpdateView<TEntity>(_manager).Show();
                         break;
                     case nameof(Commands.delete):
-                        new DeleteView<T>(_manager).Show();
+                        new DeleteView<TEntity>(_manager).Show();
                         break;
                     default:
                         AlertMessages.Show("Неверно выбранный пункт меню");

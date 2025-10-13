@@ -5,11 +5,13 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class DeleteView<T> where T : Table
+    internal class DeleteView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     { 
-        private IManager<T> _manager;
+        private IManager<TEntity, TDto> _manager;
 
-        public DeleteView(IManager<T> manager)
+        public DeleteView(IManager<TEntity, TDto> manager)
         {
             _manager = manager;
         }

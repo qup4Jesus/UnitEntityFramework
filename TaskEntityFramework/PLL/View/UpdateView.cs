@@ -5,11 +5,13 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class UpdateView<T> where T : Table
+    internal class UpdateView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     {
-        private IManager<T> _manager;
+        private IManager<TEntity, TDto> _manager;
 
-        public UpdateView(IManager<T> manager)
+        public UpdateView(IManager<TEntity, TDto> manager)
         {
             _manager = manager;
         }

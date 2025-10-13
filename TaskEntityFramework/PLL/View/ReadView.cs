@@ -5,11 +5,13 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class ReadView<T> where T : Table
+    internal class ReadView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     {
-        private IManager<T> _manager;
+        private IManager<TEntity, TDto> _manager;
 
-        public ReadView(IManager<T> manager)
+        public ReadView(IManager<TEntity, TDto> manager)
         {
             _manager = manager;
         }
@@ -22,7 +24,11 @@ namespace TaskEntityFramework.PLL.View
 
                 Console.WriteLine("Выберите показ пользователей : \n" +
                     "1 - Показать все записи\n" +
-                    "2 - Показать конкретную запись по ID");
+                    "2 - Показать конкретную запись по ID\n" +
+                    "3 - Показать записи по условию\n" +
+                    "4 - Показать первую запись в таблице\n" +
+                    "5 - Показать объединенные таблицы\n" +
+                    "6 - Показать сумму ID (???)");
 
                 switch (Console.ReadLine())
                 {
@@ -45,9 +51,9 @@ namespace TaskEntityFramework.PLL.View
 
         private void ShowAllRecords()
         {
-            List<T> listElem = _manager.ReadAll();
+            List<TEntity> listElem = _manager.ReadAll();
 
-            foreach (T item in listElem)
+            foreach (TEntity item in listElem)
             {
                 if (item is User user)
                 {
@@ -69,7 +75,7 @@ namespace TaskEntityFramework.PLL.View
             Console.Write("Введите id: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                T record = _manager.ReadOne(id);
+                TEntity record = _manager.ReadOne(id);
 
                 if (record is User user)
                 {

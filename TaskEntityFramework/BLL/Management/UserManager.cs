@@ -6,11 +6,11 @@ using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
-    internal class ManagerUser : IManager<User>
+    internal class UserManager : IManager<User, User>
     {
         private UserRepository _manager;
         private UserFactory _factory;
-        public ManagerUser()
+        public UserManager()
         {
             _manager = new UserRepository();
             _factory = new UserFactory();

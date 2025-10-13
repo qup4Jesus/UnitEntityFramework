@@ -5,11 +5,11 @@ using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
-    internal class ManagerAuthor : IManager<Author>
+    internal class AuthorManager : IManager<Author, Author>
     {
         private AuthorRepository _manager;
         private AuthorFactory _factory;
-        public ManagerAuthor()
+        public AuthorManager()
         {
             _manager = new AuthorRepository();
             _factory = new AuthorFactory();

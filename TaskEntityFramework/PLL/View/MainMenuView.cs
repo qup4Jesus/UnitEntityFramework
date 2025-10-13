@@ -1,20 +1,19 @@
 ﻿
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using TaskEntityFramework.BLL.Management;
 using TaskEntityFramework.DAL.Model;
-using TaskEntityFramework.DAL.Repositories;
+using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
     internal class MainMenuView
     {
-        private ManagerBook _books;
-        private ManagerUser _users;
-        private ManagerDescriptionBook _description;
-        private ManagerAuthor _author;
+        private BookManager _books;
+        private UserManager _users;
+        private DescriptionBookManager _description;
+        private AuthorManager _author;
 
-        public MainMenuView(ManagerBook books, ManagerUser users, ManagerDescriptionBook descriptionBook, ManagerAuthor author)
+        public MainMenuView(BookManager books, UserManager users, DescriptionBookManager descriptionBook, AuthorManager author)
         {
             _books = books;
             _users = users;
@@ -26,25 +25,29 @@ namespace TaskEntityFramework.PLL.View
         {
             while (true)
             {
+                Console.Clear();
+
                 Console.WriteLine(
                         "Добро пожаловать в нашу библиотеку!\n" +
                         "Выберите таблицу для работы с ней: \n" +
                         "1 - Users\n" +
-                        "2 - Books");
+                        "2 - Books\n" +
+                        "3 - DescriptionBook\n" +
+                        "4 - Author");
 
                 switch (Console.ReadLine().ToLower())
                 {
                     case "1":
-                        new ChoiceTableView<User>(_users).Show();
+                        new ChoiceTableView<User, User>(_users).Show();
                         break;
                     case "2":
-                        new ChoiceTableView<Book>(_books).Show();
+                        new ChoiceTableView<Book, BookUserDto>(_books).Show();
                         break;
                     case "3":
-                        new ChoiceTableView<DescriptionBook>(_description).Show();
+                        new ChoiceTableView<DescriptionBook, DescriptionBookAuthorDto>(_description).Show();
                         break;
                     case "4":
-                        new ChoiceTableView<Author>(_author).Show();
+                        new ChoiceTableView<Author, Author>(_author).Show();
                         break;
                     case "users":
                         goto case "1";
