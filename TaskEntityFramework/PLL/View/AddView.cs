@@ -21,7 +21,7 @@ namespace TaskEntityFramework.PLL.View
 
         public void Show()
         {
-            SuccessMessages.Show("Добавление нового элемента");
+            SuccessMessages.Show("Добавление нового элемента\n");
 
             Console.WriteLine("Для добавления нового элемента укажите эти данные: ");
 

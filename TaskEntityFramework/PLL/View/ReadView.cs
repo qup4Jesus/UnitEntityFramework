@@ -38,6 +38,18 @@ namespace TaskEntityFramework.PLL.View
                     case "2":
                         ShowRecordById();
                         break;
+                    case "3":
+                        ShowRecordByWhere();
+                        break;
+                    case "4":
+                        ShowRecordFirst();
+                        break;
+                    case "5":
+                        ShowRecordById();
+                        break;
+                    case "6":
+                        ShowRecordById();
+                        break;
                     default:
                         AlertMessages.Show("Введено не корректное значение!");
                         break;
@@ -65,7 +77,26 @@ namespace TaskEntityFramework.PLL.View
                 {
                     Console.WriteLine(
                         $"Название книги: {book.Name}\n" +
-                        $"Дата выхода: {book.ReleaseDate}\n");
+                        $"Дата выхода: {book.ReleaseDate}\n" +
+                        $"ID Описания книги: {book.DescriptionBookId}");
+                }
+                else if (item is DescriptionBook descriptionBook)
+                {
+                    Console.WriteLine(
+                        $"Описание книги: {descriptionBook.Description}\n" +
+                        $"Жанр: {descriptionBook.Genre}\n" +
+                        $"ID автора: {descriptionBook.AuthorId}");
+                }
+                else if (item is Author author)
+                {
+                    Console.WriteLine(
+                        $"Название книги: {author.Name}\n" +
+                        $"Год рождения: {author.YearBirth}\n" +
+                        $"Гож смерти: {author.YearDeath}");
+                }
+                else
+                {
+                    throw new Exception();
                 }
             }
         }
@@ -81,18 +112,128 @@ namespace TaskEntityFramework.PLL.View
                 {
                     Console.WriteLine(
                         $"Имя пользователя: {user.Name}\n" +
-                        $"Email пользователя: {user.Email}");
+                        $"Email пользователя: {user.Email}\n");
                 }
                 else if (record is Book book)
                 {
                     Console.WriteLine(
                         $"Название книги: {book.Name}\n" +
-                        $"Дата выхода: {book.ReleaseDate}");
+                        $"Дата выхода: {book.ReleaseDate}\n" +
+                        $"ID Описания книги: {book.DescriptionBookId}");
+                }
+                else if (record is DescriptionBook descriptionBook)
+                {
+                    Console.WriteLine(
+                        $"Описание книги: {descriptionBook.Description}\n" +
+                        $"Жанр: {descriptionBook.Genre}\n" +
+                        $"ID автора: {descriptionBook.AuthorId}");
+                }
+                else if (record is Author author)
+                {
+                    Console.WriteLine(
+                        $"Название книги: {author.Name}\n" +
+                        $"Год рождения: {author.YearBirth}\n" +
+                        $"Гож смерти: {author.YearDeath}");
                 }
             }
             else
             {
-                AlertMessages.Show("Неверный формат ID!");
+                throw new ArgumentException();
+            }
+        }
+
+        private void ShowRecordByWhere()
+        {
+            Console.WriteLine("Введите id: ");
+
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                List<TEntity> record = _manager.RequestHandlers.Find(id);
+
+                if (record is List<User> users)
+                {
+                    foreach (User user in users)
+                    {
+                        Console.WriteLine(
+                        $"Имя пользователя: {user.Name}\n" +
+                        $"Email пользователя: {user.Email}\n");
+                    }
+                }
+                else if (record is List<Book> books)
+                {
+                    foreach (Book book in books)
+                    {
+                        Console.WriteLine(
+                        $"Название книги: {book.Name}\n" +
+                        $"Дата выхода: {book.ReleaseDate}\n" +
+                        $"ID Описания книги: {book.DescriptionBookId}");
+                    }
+                }
+                else if (record is List<DescriptionBook> descriptionBooks)
+                {
+                    foreach (DescriptionBook descriptionBook in descriptionBooks)
+                    {
+                        Console.WriteLine(
+                        $"Описание книги: {descriptionBook.Description}\n" +
+                        $"Жанр: {descriptionBook.Genre}\n" +
+                        $"ID автора: {descriptionBook.AuthorId}");
+                    }
+                }
+                else if (record is List<Author> authors)
+                {
+                    foreach (Author author in authors)
+                    {
+                        Console.WriteLine(
+                        $"Название книги: {author.Name}\n" +
+                        $"Год рождения: {author.YearBirth}\n" +
+                        $"Гож смерти: {author.YearDeath}");
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+
+        }
+
+        private void ShowRecordFirst()
+        {
+            switch (_manager.RequestHandlers.FindFirst())
+            {
+                case User user:
+
+                    Console.WriteLine(
+                        $"Имя пользователя: {user.Name}\n" +
+                        $"Email пользователя: {user.Email}\n");
+
+                    break;
+                case Book book:
+
+                    Console.WriteLine(
+                        $"Название книги: {book.Name}\n" +
+                        $"Дата выхода: {book.ReleaseDate}\n" +
+                        $"ID Описания книги: {book.DescriptionBookId}");
+
+                    break;
+                case DescriptionBook descriptionBook:
+
+                    Console.WriteLine(
+                        $"Описание книги: {descriptionBook.Description}\n" +
+                        $"Жанр: {descriptionBook.Genre}\n" +
+                        $"ID автора: {descriptionBook.AuthorId}");
+
+                    break;
+                case Author author:
+
+                    Console.WriteLine(
+                        $"Название книги: {author.Name}\n" +
+                        $"Год рождения: {author.YearBirth}\n" +
+                        $"Гож смерти: {author.YearDeath}");
+
+                    break;
+                default:
+                    throw new Exception();
             }
         }
     }

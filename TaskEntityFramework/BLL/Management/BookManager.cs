@@ -1,5 +1,7 @@
 ﻿
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.DAL.Repositories;
@@ -10,10 +12,12 @@ namespace TaskEntityFramework.BLL.Management
     {
         private BookRepository _manager;
         private BookFactory _factory;
+        private BookRequestHandler _handler;
         public BookManager()
         {
             _manager = new BookRepository();
             _factory = new BookFactory();
+            _handler = new BookRequestHandler();
         }
 
         public void Add(List<Book> books)
@@ -23,7 +27,7 @@ namespace TaskEntityFramework.BLL.Management
                 if (String.IsNullOrEmpty(book.Name))
                     throw new ArgumentNullException();
                 if (!(book.ReleaseDate is DateTime))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
             }
 
             _manager.Add(books);
@@ -33,8 +37,8 @@ namespace TaskEntityFramework.BLL.Management
         {
             var books = _manager.ReadAll();
 
-            if (books.Count == 0)
-                throw new ArgumentNullException();
+            if (books is null)
+                throw new BookNotFoundException();
 
             return books;
         }
@@ -44,7 +48,7 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new BookNotFoundException();
 
             return book;
         }
@@ -54,18 +58,18 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new BookNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
             if (nameColumn != nameof(book.Name))
-                throw new ArgumentNullException();
+                throw new ColumnNotFoundException();
             if (nameColumn != nameof(book.ReleaseDate))
-                throw new ArgumentNullException();
+                throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
             if (nameColumn == nameof(book.ReleaseDate))
                 if (!DateOnly.TryParse(value, out DateOnly result))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
 
             _manager.Update(id, nameColumn, value);
         }
@@ -75,7 +79,7 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new BookNotFoundException();
 
             _manager.Delete(id);
         }

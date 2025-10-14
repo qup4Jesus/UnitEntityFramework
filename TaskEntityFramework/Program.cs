@@ -11,14 +11,7 @@ var start = new MainMenuView(books, users, description, author);
 
 while (true)
 {
-    try
-    {
-        start.Show();
-    }
-    catch (Exception)
-    {
-
-    }
+    start.Show();
 }
 
 

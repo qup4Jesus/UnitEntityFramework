@@ -3,6 +3,7 @@ using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.BLL.Management;
 using TaskEntityFramework.PLL.Helpers;
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
 
 namespace TaskEntityFramework.PLL.View
 {
@@ -32,23 +33,58 @@ namespace TaskEntityFramework.PLL.View
                     $"{nameof(Commands.update)} : обновить пользователя\n" +
                     $"{nameof(Commands.delete)} : удалить пользователя\n");
 
-                switch (Console.ReadLine())
+                try
                 {
-                    case nameof(Commands.create):
-                        new AddView<TEntity>(_manager, _entityFactory).Show();
-                        break;
-                    case nameof(Commands.read):
-                        new ReadView<TEntity>(_manager).Show();
-                        break;
-                    case nameof(Commands.update):
-                        new UpdateView<TEntity>(_manager).Show();
-                        break;
-                    case nameof(Commands.delete):
-                        new DeleteView<TEntity>(_manager).Show();
-                        break;
-                    default:
-                        AlertMessages.Show("Неверно выбранный пункт меню");
-                        break;
+                    switch (Console.ReadLine())
+                    {
+                        case nameof(Commands.create):
+                            new AddView<TEntity, TDto>(_manager, _entityFactory).Show();
+                            break;
+                        case nameof(Commands.read):
+                            new ReadView<TEntity, TDto>(_manager).Show();
+                            break;
+                        case nameof(Commands.update):
+                            new UpdateView<TEntity, TDto>(_manager).Show();
+                            break;
+                        case nameof(Commands.delete):
+                            new DeleteView<TEntity, TDto>(_manager).Show();
+                            break;
+                        default:
+                            AlertMessages.Show("Неверно выбранный пункт меню");
+                            break;
+                    }
+                }
+                catch (ColumnNotFoundException)
+                {
+                    AlertMessages.Show("Указанный столбец не найден!");
+                }
+                catch (NotAssociationException)
+                {
+                    AlertMessages.Show("Столбец не имеет связей!");
+                }
+                catch (UserNotFoundException)
+                {
+                    AlertMessages.Show("Пользователь не найден!");
+                }
+                catch (BookNotFoundException)
+                {
+                    AlertMessages.Show("Пользователь не найден!");
+                }
+                catch (DescriptionBookNotFoundException)
+                {
+                    AlertMessages.Show("Пользователь не найден!");
+                }
+                catch (AuthorNotFoundException)
+                {
+                    AlertMessages.Show("Пользователь не найден!");
+                }
+                catch (ArgumentException)
+                {
+                    AlertMessages.Show("Неверный формат данных");
+                }
+                catch (Exception)
+                {
+                    AlertMessages.Show("Неизвестная ошибка...");
                 }
 
                 Console.WriteLine("Нажмите любую клавишу, чтобы продолжить...");

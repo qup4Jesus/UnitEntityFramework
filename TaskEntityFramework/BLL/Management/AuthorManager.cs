@@ -1,5 +1,7 @@
 ﻿
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Repositories;
 
@@ -9,10 +11,12 @@ namespace TaskEntityFramework.BLL.Management
     {
         private AuthorRepository _manager;
         private AuthorFactory _factory;
+        private AuthorRequestHandler _handler;
         public AuthorManager()
         {
             _manager = new AuthorRepository();
             _factory = new AuthorFactory();
+            _handler = new AuthorRequestHandler();
         }
 
         public void Add(List<Author> listElements)
@@ -22,9 +26,9 @@ namespace TaskEntityFramework.BLL.Management
                 if (String.IsNullOrEmpty(author.Name))
                     throw new ArgumentNullException();
                 if (!(author.YearBirth is DateTime))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
                 if (!(author.YearDeath is DateTime))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
             }
 
             _manager.Add(listElements);
@@ -35,7 +39,7 @@ namespace TaskEntityFramework.BLL.Management
             var author = _manager.ReadOne(id);
 
             if (author is null)
-                throw new ArgumentNullException();
+                throw new AuthorNotFoundException();
 
             _manager.Delete(id);
         }
@@ -44,8 +48,8 @@ namespace TaskEntityFramework.BLL.Management
         {
             var author = _manager.ReadAll();
 
-            if (author.Count == 0)
-                throw new ArgumentNullException();
+            if (author is null)
+                throw new AuthorNotFoundException();
 
             return author;
         }
@@ -55,7 +59,7 @@ namespace TaskEntityFramework.BLL.Management
             var author = _manager.ReadOne(id);
 
             if (author is null)
-                throw new ArgumentNullException();
+                throw new AuthorNotFoundException();
 
             return author;
         }
@@ -65,15 +69,15 @@ namespace TaskEntityFramework.BLL.Management
             var author = _manager.ReadOne(id);
 
             if (author is null)
-                throw new ArgumentNullException();
+                throw new AuthorNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
             if (nameColumn != nameof(author.Name))
-                throw new ArgumentNullException();
+                throw new ColumnNotFoundException();
             if (nameColumn != nameof(author.YearBirth))
-                throw new ArgumentNullException();
+                throw new ColumnNotFoundException();
             if (nameColumn != nameof(author.YearDeath))
-                throw new ArgumentNullException();
+                throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
 
