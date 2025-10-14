@@ -6,12 +6,6 @@ namespace TaskEntityFramework.DAL.Repositories
         // Сущность БД
         protected private MyAppContext _db;
 
-        // Конструктор в котором инициализируем подключение к БД
-        public AbstractRepository()
-        {
-            _db = new MyAppContext();
-        }
-
         // Create: Метод для добавления элементов в базу данных 
         public abstract void Add(List<T> newElements);
 

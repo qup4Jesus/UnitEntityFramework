@@ -63,9 +63,7 @@ namespace TaskEntityFramework.BLL.Management
                 throw new UserNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(user.Name))
-                throw new ColumnNotFoundException();
-            if (nameColumn != nameof(user.Email))
+            if (nameColumn != nameof(user.Name) && nameColumn != nameof(user.Email))
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();

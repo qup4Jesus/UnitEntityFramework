@@ -8,63 +8,48 @@ namespace TaskEntityFramework.DAL.SQLRequests
     {
         public override List<DescriptionBook> Find(int whereValue)
         {
-            using (_db)
-            {
-                return _db.DescriptionBooks.Where(u => u.Id == whereValue).ToList();
-            }
+            return _db.DescriptionBooks.Where(u => u.Id == whereValue).ToList();
         }
 
         public override List<DescriptionBook> Find(string whereValue, string nameColumn)
         {
-            using (_db)
+            switch (nameColumn)
             {
-                switch (nameColumn)
-                {
-                    case "Description":
-                        return _db.DescriptionBooks.Where(u => u.Description == whereValue).ToList();
-                    case "Genre":
-                        return _db.DescriptionBooks.Where(u => u.Genre == whereValue).ToList();
-                    default:
-                        return null;
-                }
+                case "Description":
+                    return _db.DescriptionBooks.Where(u => u.Description == whereValue).ToList();
+                case "Genre":
+                    return _db.DescriptionBooks.Where(u => u.Genre == whereValue).ToList();
+                default:
+                    return null;
             }
         }
 
         public override DescriptionBook FindFirst()
         {
-            using (_db)
-            {
-                return _db.DescriptionBooks.First();
-            }
+            return _db.DescriptionBooks.First();
         }
 
         public override List<DescriptionBookAuthorDto> Join()
         {
-            using (_db)
-            {
-                return _db.DescriptionBooks
-                    .Join(_db.Author,
-                        db => db.AuthorId,
-                        a => a.Id,
-                        (db, a) => new DescriptionBookAuthorDto
-                        {
-                            DescriptionBookId = db.Id,
-                            Description = db.Description,
-                            Genre = db.Genre,
-                            AuthorId = a.Id,
-                            Name = a.Name,
-                            YearBirth = a.YearBirth,
-                            YearDeath = a.YearDeath
-                        }).ToList();
-            }
+            return _db.DescriptionBooks
+                .Join(_db.Author,
+                    db => db.AuthorId,
+                    a => a.Id,
+                    (db, a) => new DescriptionBookAuthorDto
+                    {
+                        DescriptionBookId = db.Id,
+                        Description = db.Description,
+                        Genre = db.Genre,
+                        AuthorId = a.Id,
+                        Name = a.Name,
+                        YearBirth = a.YearBirth,
+                        YearDeath = a.YearDeath
+                    }).ToList();
         }
 
         public override int Sum()
         {
-            using (_db)
-            {
-                return _db.DescriptionBooks.Sum(u => u.Id);
-            }
+            return _db.DescriptionBooks.Sum(u => u.Id);
         }
     }
 }

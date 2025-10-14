@@ -5,11 +5,9 @@ namespace TaskEntityFramework.DAL.Repositories
 {
     internal class BookRepository : AbstractRepository<Book>
     {
-        public BookRepository() : base() { }
-
         public override void Add(List<Book> newBooks)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 foreach (var book in newBooks)
                 {
@@ -24,7 +22,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Delete(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Удаление конкретного пользователя по Id
                 var book = _db.Books.Find(id);
@@ -39,7 +37,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override List<Book> ReadAll()
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Получение всех существующих книг в БД
                 return _db.Books.ToList();
@@ -48,7 +46,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override Book ReadOne(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Конкретную книгу по Id
                 var book = _db.Books.Find(id);
@@ -59,7 +57,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Update(int id, string nameColumn, string value)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Изменение книги по её Id
                 var book = _db.Books.Find(id);
@@ -70,7 +68,7 @@ namespace TaskEntityFramework.DAL.Repositories
                         book.Name = value;
                         break;
                     case nameof(book.ReleaseDate):
-                        var date = DateTime.Parse(value);
+                        var date = DateOnly.Parse(value);
                         book.ReleaseDate = date;
                         break;
                     default:

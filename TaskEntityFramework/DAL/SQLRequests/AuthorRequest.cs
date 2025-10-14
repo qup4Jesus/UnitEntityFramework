@@ -7,16 +7,14 @@ namespace TaskEntityFramework.DAL.SQLRequests
     {
         public override List<Author> Find(int whereValue)
         {
-            using (_db)
-            {
+            using (_db = new MyAppContext())
                 return _db.Author.Where(u => u.Id == whereValue).ToList();
-            }
+
         }
 
         public override List<Author> Find(string whereValue, string nameColumn)
         {
-            using (_db)
-            {
+            using (_db = new MyAppContext())
                 switch (nameColumn)
                 {
                     case "Name":
@@ -28,28 +26,24 @@ namespace TaskEntityFramework.DAL.SQLRequests
                     default:
                         return null;
                 }
-            }
         }
 
         public override Author FindFirst()
         {
-            using (_db)
-            {
+            using (_db = new MyAppContext())
                 return _db.Author.First();
-            }
         }
 
         public override List<Author> Join()
         {
-            return null;
+            using (_db = new MyAppContext())
+                return null;
         }
 
         public override int Sum()
         {
-            using (_db)
-            {
+            using (_db = new MyAppContext())
                 return _db.Author.Sum(u => u.Id);
-            }
         }
     }
 }

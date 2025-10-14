@@ -11,12 +11,12 @@ namespace TaskEntityFramework.BLL.Management
     {
         private AuthorRepository _manager;
         private AuthorFactory _factory;
-        private AuthorRequestHandler _handler;
+        public IRequestHandler<Author, Author> RequestHandlers { get; set; }
         public AuthorManager()
         {
             _manager = new AuthorRepository();
             _factory = new AuthorFactory();
-            _handler = new AuthorRequestHandler();
+            RequestHandlers = new AuthorRequestHandler();
         }
 
         public void Add(List<Author> listElements)
@@ -48,8 +48,8 @@ namespace TaskEntityFramework.BLL.Management
         {
             var author = _manager.ReadAll();
 
-            if (author is null)
-                throw new AuthorNotFoundException();
+            //if (author is null)
+            //    throw new AuthorNotFoundException();
 
             return author;
         }
@@ -72,11 +72,9 @@ namespace TaskEntityFramework.BLL.Management
                 throw new AuthorNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(author.Name))
-                throw new ColumnNotFoundException();
-            if (nameColumn != nameof(author.YearBirth))
-                throw new ColumnNotFoundException();
-            if (nameColumn != nameof(author.YearDeath))
+            if (nameColumn != nameof(author.Name) && 
+                nameColumn != nameof(author.YearBirth) && 
+                nameColumn != nameof(author.YearDeath))
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();

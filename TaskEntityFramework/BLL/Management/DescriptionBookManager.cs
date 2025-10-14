@@ -12,12 +12,13 @@ namespace TaskEntityFramework.BLL.Management
     {
         private DescriptionBookRepository _manager;
         private DescriptionBookFactory _factory;
-        private DescriptionBookRequestHandler _handler;
+        public IRequestHandler<DescriptionBook, DescriptionBookAuthorDto> RequestHandlers { get; set; }
+
         public DescriptionBookManager()
         {
             _manager = new DescriptionBookRepository();
             _factory = new DescriptionBookFactory();
-            _handler = new DescriptionBookRequestHandler();
+            RequestHandlers = new DescriptionBookRequestHandler();
         }
 
         public void Add(List<DescriptionBook> listElements)
@@ -47,8 +48,8 @@ namespace TaskEntityFramework.BLL.Management
         {
             var books = _manager.ReadAll();
 
-            if (books is null)
-                throw new DescriptionBookNotFoundException();
+            //if (books is null)
+            //    throw new DescriptionBookNotFoundException();
 
             return books;
         }
@@ -71,9 +72,7 @@ namespace TaskEntityFramework.BLL.Management
                 throw new DescriptionBookNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(book.Description))
-                throw new ColumnNotFoundException();
-            if (nameColumn != nameof(book.Genre))
+            if (nameColumn != nameof(book.Description) && nameColumn != nameof(book.Genre))
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();

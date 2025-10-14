@@ -1,5 +1,7 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
 using TaskEntityFramework.BLL.Management;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.PLL.Helpers;
@@ -46,10 +48,30 @@ namespace TaskEntityFramework.PLL.View
                     Console.Write("Введите название : ");
                     string title = Console.ReadLine();
 
-                    Console.Write("Введите дату релиза (В формате YYYY-MM-DD): ");
+                    Console.Write("Введите дату релиза (В формате YYYY-MM-DD) : ");
                     string dateRelease = Console.ReadLine();
 
-                    listElements = new List<string> { title, dateRelease };
+                    Console.WriteLine(
+                        "Введите пользователя книги (id) default = 0 : \n" +
+                        "(Если книга не находится <на рука> ПРОПУСТИТЬ)");
+                    string idUser = Console.ReadLine();
+
+                    List<DescriptionBook> descriptionBooks = new DescriptionBookManager().ReadAll();
+
+                    Console.WriteLine(
+                        $"Количество существующие записей : {descriptionBooks.Count}\n" +
+                        "Для создания новой записи требуется выбрать <0>");
+                    foreach (var descriptionBook in descriptionBooks)
+                    {
+                        Console.WriteLine($"id : {descriptionBook.Id}");
+                    }
+
+                    Console.Write("Введите описание книги (id) : ");
+                    string idDescription = Console.ReadLine();
+
+                    new HandlersDescriptionBook().Check(idDescription);
+
+                    listElements = new List<string> { title, dateRelease, idUser, idDescription };
 
                     newItem = _factory.CreateFromUserInput(listElements);
                     _manager.Add(new List<TEntity> { newItem });
@@ -62,8 +84,23 @@ namespace TaskEntityFramework.PLL.View
 
                     Console.Write("Введите жанр : ");
                     string genre = Console.ReadLine();
-                    
-                    listElements = new List<string> { description, genre };
+
+                    List<Author> authors = new AuthorManager().ReadAll();
+
+                    Console.WriteLine(
+                        $"Количество существующие записей : {authors.Count}\n" +
+                        "Для создания новой записи требуется выбрать <0>");
+                    foreach (var author in authors)
+                    {
+                        Console.WriteLine($"id : {author.Id}");
+                    }
+
+                    Console.WriteLine("Введите автора (id) : ");
+                    string idAuthor = Console.ReadLine();
+
+                    new HandlersAuthor().Check(idAuthor);
+
+                    listElements = new List<string> { description, genre, idAuthor };
 
                     newItem = _factory.CreateFromUserInput(listElements);
                     _manager.Add(new List<TEntity> { newItem });
@@ -74,10 +111,10 @@ namespace TaskEntityFramework.PLL.View
                     Console.Write("Введите имя автора : ");
                     name = Console.ReadLine();
 
-                    Console.Write("Введите годы жизни : ");
+                    Console.Write("Введите годы жизни (В формате YYYY-MM-DD) : ");
                     string dateBirth = Console.ReadLine();
 
-                    Console.Write("Введите годы смерти : ");
+                    Console.Write("Введите годы смерти (В формате YYYY-MM-DD) : ");
                     string dateDeath = Console.ReadLine();
 
                     listElements = new List<string> { name, dateBirth, dateDeath };

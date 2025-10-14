@@ -7,11 +7,9 @@ var users = new UserManager();
 var description = new DescriptionBookManager();
 var author = new AuthorManager();
 
-var start = new MainMenuView(books, users, description, author);
+var menu = new MainMenuView(books, users, description, author);
 
 while (true)
 {
-    start.Show();
+    menu.Show();
 }
-
-

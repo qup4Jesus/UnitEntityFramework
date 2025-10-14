@@ -1,5 +1,6 @@
 ﻿
 using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.DAL;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.DAL.SQLRequests;
@@ -29,9 +30,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
         {
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != "Name")
-                throw new ColumnNotFoundException();
-            if (nameColumn != "ReleaseDate")
+            if (nameColumn != "Name" && nameColumn != "ReleaseDate")
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(whereValue))
                 throw new ArgumentNullException();

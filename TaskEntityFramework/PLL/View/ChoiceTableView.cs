@@ -31,11 +31,12 @@ namespace TaskEntityFramework.PLL.View
                     $"{nameof(Commands.create)} : добавить элемент в таблицу\n" +
                     $"{nameof(Commands.read)} : просмотреть пользователей\n" +
                     $"{nameof(Commands.update)} : обновить пользователя\n" +
-                    $"{nameof(Commands.delete)} : удалить пользователя\n");
+                    $"{nameof(Commands.delete)} : удалить пользователя\n" +
+                    $"<-- Назад <<<");
 
                 try
                 {
-                    switch (Console.ReadLine())
+                    switch (Console.ReadLine().ToLower())
                     {
                         case nameof(Commands.create):
                             new AddView<TEntity, TDto>(_manager, _entityFactory).Show();
@@ -49,6 +50,8 @@ namespace TaskEntityFramework.PLL.View
                         case nameof(Commands.delete):
                             new DeleteView<TEntity, TDto>(_manager).Show();
                             break;
+                        case "назад":
+                            return;
                         default:
                             AlertMessages.Show("Неверно выбранный пункт меню");
                             break;
@@ -68,23 +71,25 @@ namespace TaskEntityFramework.PLL.View
                 }
                 catch (BookNotFoundException)
                 {
-                    AlertMessages.Show("Пользователь не найден!");
+                    AlertMessages.Show("Книга не найдена!");
                 }
                 catch (DescriptionBookNotFoundException)
                 {
-                    AlertMessages.Show("Пользователь не найден!");
+                    AlertMessages.Show("Описание найдено!");
                 }
                 catch (AuthorNotFoundException)
                 {
-                    AlertMessages.Show("Пользователь не найден!");
+                    AlertMessages.Show("Автор не найден!");
                 }
                 catch (ArgumentException)
                 {
                     AlertMessages.Show("Неверный формат данных");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    AlertMessages.Show("Неизвестная ошибка...");
+                    AlertMessages.Show(
+                        $"Неизвестная ошибка... {ex.Message}\n" +
+                        $"Подробности : {ex.InnerException?.Message}");
                 }
 
                 Console.WriteLine("Нажмите любую клавишу, чтобы продолжить...");

@@ -1,5 +1,6 @@
 ﻿
 using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.DAL;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.SQLRequests;
 
@@ -28,14 +29,17 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
         {
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != "Name")
-                throw new ColumnNotFoundException();
-            if (nameColumn != "Email")
+            if (nameColumn != "Name" && nameColumn != "Email")
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(whereValue))
                 throw new ArgumentNullException();
 
-            return _userRequest.Find(whereValue, nameColumn);
+            var user = _userRequest.Find(whereValue, nameColumn);
+
+            if (user.Count == 0)
+                throw new UserNotFoundException();
+
+            return user;
         }
 
         public User FindFirst()

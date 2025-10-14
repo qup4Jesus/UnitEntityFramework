@@ -12,12 +12,12 @@ namespace TaskEntityFramework.BLL.Management
     {
         private BookRepository _manager;
         private BookFactory _factory;
-        private BookRequestHandler _handler;
+        public IRequestHandler<Book, BookUserDto> RequestHandlers { get; set; }
         public BookManager()
         {
             _manager = new BookRepository();
             _factory = new BookFactory();
-            _handler = new BookRequestHandler();
+            RequestHandlers = new BookRequestHandler();
         }
 
         public void Add(List<Book> books)
@@ -26,7 +26,7 @@ namespace TaskEntityFramework.BLL.Management
             {
                 if (String.IsNullOrEmpty(book.Name))
                     throw new ArgumentNullException();
-                if (!(book.ReleaseDate is DateTime))
+                if (!(book.ReleaseDate is DateOnly))
                     throw new ArgumentException();
             }
 
@@ -61,9 +61,7 @@ namespace TaskEntityFramework.BLL.Management
                 throw new BookNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(book.Name))
-                throw new ColumnNotFoundException();
-            if (nameColumn != nameof(book.ReleaseDate))
+            if (nameColumn != nameof(book.Name) && nameColumn != nameof(book.ReleaseDate))
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();

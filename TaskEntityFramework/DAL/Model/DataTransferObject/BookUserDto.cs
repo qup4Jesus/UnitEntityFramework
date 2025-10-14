@@ -6,7 +6,7 @@ namespace TaskEntityFramework.DAL.Model.DataTransferObject
         public int Id { get; set; }
         public int BookId { get; set; }
         public string BookName { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string? Email { get; set; }

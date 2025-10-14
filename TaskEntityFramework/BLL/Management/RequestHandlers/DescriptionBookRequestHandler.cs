@@ -29,9 +29,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
         {
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != "Description")
-                throw new ColumnNotFoundException();
-            if (nameColumn != "Genre")
+            if (nameColumn != "Description" && nameColumn != "Genre")
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(whereValue))
                 throw new ArgumentNullException();

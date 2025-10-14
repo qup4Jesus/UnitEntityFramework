@@ -1,5 +1,6 @@
 ﻿
 using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.DAL;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.SQLRequests;
 
@@ -28,11 +29,9 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
         {
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != "Name")
-                throw new ColumnNotFoundException();
-            if (nameColumn != "GeYearBirth")
-                throw new ColumnNotFoundException();
-            if (nameColumn != "YearDeath")
+            if (nameColumn != "Name" &&
+                nameColumn != "YearBirth" &&
+                nameColumn != "YearDeath")
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(whereValue))
                 throw new ArgumentNullException();

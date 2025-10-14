@@ -5,11 +5,9 @@ namespace TaskEntityFramework.DAL.Repositories
 {
     internal class AuthorRepository : AbstractRepository<Author>
     {
-        public AuthorRepository() : base() { }
-
         public override void Add(List<Author> newElements)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 _db.AddRange(newElements);
 
@@ -19,7 +17,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Delete(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 var author = _db.Author.Find(id);
 
@@ -31,7 +29,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override List<Author> ReadAll()
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 return _db.Author.ToList();
             }
@@ -39,7 +37,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override Author ReadOne(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 return _db.Author.Find(id);
             }
@@ -47,7 +45,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Update(int id, string nameColumn, string value)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 var author = _db.Author.Find(id);
 
