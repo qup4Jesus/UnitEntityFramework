@@ -1,7 +1,5 @@
 ﻿
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using TaskEntityFramework.BLL.Entities;
-using TaskEntityFramework.BLL.Exceptions;
 using TaskEntityFramework.BLL.Management;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.PLL.Helpers;
@@ -69,7 +67,7 @@ namespace TaskEntityFramework.PLL.View
                     Console.Write("Введите описание книги (id) : ");
                     string idDescription = Console.ReadLine();
 
-                    new HandlersDescriptionBook().Check(idDescription);
+                    idDescription = new DescriptionBookCreateView().Check(idDescription);
 
                     listElements = new List<string> { title, dateRelease, idUser, idDescription };
 
@@ -98,7 +96,7 @@ namespace TaskEntityFramework.PLL.View
                     Console.WriteLine("Введите автора (id) : ");
                     string idAuthor = Console.ReadLine();
 
-                    new HandlersAuthor().Check(idAuthor);
+                    idAuthor = new AuthorCreateView().Check(idAuthor);
 
                     listElements = new List<string> { description, genre, idAuthor };
 

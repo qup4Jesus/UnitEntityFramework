@@ -29,7 +29,8 @@ namespace TaskEntityFramework.PLL.View
                     "3 - Показать записи по условию\n" +
                     "4 - Показать первую запись в таблице\n" +
                     "5 - Показать объединенные таблицы\n" +
-                    "6 - Показать сумму ID (???)");
+                    "6 - Показать сумму ID (???)\n" +
+                    "<-- Назад <<<");
 
                 switch (Console.ReadLine())
                 {
@@ -51,6 +52,8 @@ namespace TaskEntityFramework.PLL.View
                     case "6":
                         ShowRecordSum();
                         break;
+                    case "назад":
+                        return;
                     default:
                         AlertMessages.Show("Введено не корректное значение!");
                         break;

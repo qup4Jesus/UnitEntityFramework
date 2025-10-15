@@ -6,18 +6,18 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class HandlersDescriptionBook
+    internal class DescriptionBookCreateView
     {
         private DescriptionBookManager _manager;
         private DescriptionBookFactory _factory;
 
-        public HandlersDescriptionBook()
+        public DescriptionBookCreateView()
         {
             _manager = new DescriptionBookManager();
             _factory = new DescriptionBookFactory();
         }
 
-        public void Check(string descriptionId)
+        public string Check(string descriptionId)
         {
             if (int.TryParse(descriptionId, out int result))
             {
@@ -43,14 +43,18 @@ namespace TaskEntityFramework.PLL.View
                     Console.Write("Введите автора (id) : ");
                     string idAuthor = Console.ReadLine();
 
-                    new HandlersAuthor().Check(idAuthor);
+                    string id = new AuthorCreateView().Check(idAuthor);
 
-                    var listElements = new List<string> { description, genre, idAuthor };
+                    var listElements = new List<string> { description, genre, id };
 
                     var newItem = _factory.CreateFromUserInput(listElements);
                     _manager.Add(new List<DescriptionBook> { newItem });
+
+                    return (_manager.ReadAll().LastOrDefault().Id).ToString();
                 }
             }
+
+            return descriptionId;
         }
     }
 }
