@@ -1,5 +1,7 @@
 ﻿
+using System.Threading.Channels;
 using TaskEntityFramework.BLL.Management;
+using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.PLL.Helpers;
@@ -27,9 +29,10 @@ namespace TaskEntityFramework.PLL.View
                     "1 - Показать все записи\n" +
                     "2 - Показать конкретную запись по ID\n" +
                     "3 - Показать записи по условию\n" +
-                    "4 - Показать первую запись в таблице\n" +
-                    "5 - Показать объединенные таблицы\n" +
-                    "6 - Показать сумму ID (???)\n" +
+                    "4 - Показать записи по сложному условию\n" +
+                    "5 - Показать первую запись в таблице\n" +
+                    "6 - Показать объединенные таблицы\n" +
+                    "7 - Показать сумму ID (???)\n" +
                     "<-- Назад <<<");
 
                 switch (Console.ReadLine())
@@ -44,12 +47,15 @@ namespace TaskEntityFramework.PLL.View
                         ShowRecordByWhere();
                         break;
                     case "4":
-                        ShowRecordFirst();
+                        ShowRecordByTaskWhere();
                         break;
                     case "5":
-                        ShowRecordJoin();
+                        ShowRecordFirst();
                         break;
                     case "6":
+                        ShowRecordJoin();
+                        break;
+                    case "7":
                         ShowRecordSum();
                         break;
                     case "назад":
@@ -300,6 +306,194 @@ namespace TaskEntityFramework.PLL.View
         private void ShowRecordSum()
         {
             Console.WriteLine($"Сумма id-шников : {_manager.RequestHandlers.Sum()}");
+        }
+
+        private void ShowRecordByTaskWhere()
+        {
+            switch (_manager.RequestHandlers.FindFirst())
+            {
+                case User user:
+                    AlertMessages.Show("❌❌❌ Пока не придумано ❌❌❌");
+                    break;
+                case Book book:
+
+                    Console.WriteLine(
+                        "Выберете один из запросов:\n" +
+                        "1 - Получить список книг определённого жанра и вышедшими между определенными годами\n" +
+                        "2 - Получить количество книг определенного автора в библиотеке\n" +
+                        "3 - Получить количество книг определенного жанра в библиотеке\n" +
+                        "4 - Получить булевый флаг о том, есть ли книга определенного автора и с определенным названием в библиотеке\n" +
+                        "5 - Получить булевый флаг о том, есть ли определенная книга на руках у пользователя\n" +
+                        "6 - Получить количество книг на руках у пользователя\n" +
+                        "7 - Получение последней вышедшей книги\n" +
+                        "8 - Получение списка всех книг, отсортированного в алфавитном порядке по названию\n" +
+                        "9 - Получение списка всех книг, отсортированного в порядке убывания года их выхода\n" +
+                        "<-- back <<<\n");
+
+                    Console.WriteLine("Введите номер команды :");
+                    string command = Console.ReadLine().ToLower();
+
+                    switch (command)
+                    {
+                        case "1":
+
+                            int numberCommand = int.Parse(command);
+
+                            Console.Write("Введите жанр : ");
+                            string genre = Console.ReadLine();
+
+                            Console.WriteLine("Введите временной промежуток: ");
+                            Console.Write("c - ");
+                            string fromDate = Console.ReadLine();
+
+                            Console.Write("до - ");
+                            string toDate = Console.ReadLine();
+
+                            List<Book> bookList = new BookManager().RequestHandlers.FindTask(numberCommand, genre, fromDate, toDate);
+
+                            foreach (var element in bookList)
+                            {
+                                Console.WriteLine(
+                                $"Название книги: {element.Name}\n" +
+                                $"Дата выхода: {element.ReleaseDate}\n" +
+                                $"ID Описания книги: {element.DescriptionBookId}");
+                            }
+
+                            break;
+                        case "2":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.Write("Введите имя автора : ");
+                            string authorName = Console.ReadLine();
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, authorName, "", "");
+
+                            Console.WriteLine(bookList.Count);
+
+                            break;
+                        case "3":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.Write("Введите жанр : ");
+                            genre = Console.ReadLine();
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, genre, "", "");
+
+                            Console.WriteLine(bookList.Count);
+
+                            break;
+                        case "4":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.Write("Введите имя автора : ");
+                            authorName = Console.ReadLine();
+
+                            Console.Write("Введите название книги : ");
+                            string bookName = Console.ReadLine();
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, bookName, authorName, "");
+
+                            if (bookList.Count == 0)
+                                Console.WriteLine(false);
+                            else
+                                Console.WriteLine(true);
+
+                                break;
+                        case "5":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.Write("Введите пользователя (id) : ");
+                            string userId = Console.ReadLine();
+
+                            Console.Write("Введите название книги : ");
+                            bookName = Console.ReadLine();
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, bookName, userId, "");
+
+                            if (bookList.Count == 0)
+                                Console.WriteLine(false);
+                            else
+                                Console.WriteLine(true);
+
+                            break;
+                        case "6":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.Write("Введите пользователя (id) : ");
+                            userId = Console.ReadLine();
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, userId, "", "");
+
+                            Console.WriteLine($"Количество книг на руках у пользователя: {bookList.Count()}");
+
+                            break;
+                        case "7":
+
+                            numberCommand = int.Parse(command);
+
+                            Console.WriteLine("Последняя вышедшая книга : ");
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, "", "", "");
+
+                            foreach (var element in bookList)
+                            {
+                                Console.WriteLine(
+                                $"Название книги: {element.Name}\n" +
+                                $"Дата выхода: {element.ReleaseDate}\n" +
+                                $"ID Описания книги: {element.DescriptionBookId}");
+                            }
+
+                            break;
+                        case "8":
+
+                            numberCommand = int.Parse(command);
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, "", "", "");
+
+                            foreach (var element in bookList)
+                            {
+                                Console.WriteLine(
+                                $"Название книги: {element.Name}\n" +
+                                $"Дата выхода: {element.ReleaseDate}\n" +
+                                $"ID Описания книги: {element.DescriptionBookId}");
+                            }
+
+                            break;
+                        case "9":
+
+                            numberCommand = int.Parse(command);
+
+                            bookList = new BookManager().RequestHandlers.FindTask(numberCommand, "", "", "");
+
+                            foreach (var element in bookList)
+                            {
+                                Console.WriteLine(
+                                $"Название книги: {element.Name}\n" +
+                                $"Дата выхода: {element.ReleaseDate}\n" +
+                                $"ID Описания книги: {element.DescriptionBookId}");
+                            }
+
+                            break;
+                        case "back":
+                            return;
+                        default:
+                            AlertMessages.Show("Выбран не верный пункт меню!");
+                            break;
+                    }
+
+                    break;
+                case DescriptionBook descriptionBook:
+                    AlertMessages.Show("❌❌❌ Пока не придумано ❌❌❌");
+                    break;
+                case Author author:
+                    AlertMessages.Show("❌❌❌ Пока не придумано ❌❌❌");
+                    break;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using TaskEntityFramework.BLL.Management;
+using TaskEntityFramework.DAL;
 using TaskEntityFramework.PLL.View;
 
 var books = new BookManager();

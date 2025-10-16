@@ -47,6 +47,11 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return descriptionBook;
         }
 
+        public List<DescriptionBook> FindTask(int command, string whereValueFirst = null, string whereValueSecond = null, string whereValueTree = null)
+        {
+            return null;
+        }
+
         public List<DescriptionBookAuthorDto> Join()
         {
             var descriptionBookJoinAuthor = _descriptionBookRequest.Join();

@@ -55,10 +55,10 @@ namespace TaskEntityFramework.DAL.Repositories
                         author.Name = value;
                         break;
                     case nameof(author.YearBirth):
-                        author.YearBirth = DateTime.Parse(value);
+                        author.YearBirth = DateOnly.Parse(value);
                         break;
                     case nameof(author.YearDeath):
-                        author.YearDeath = DateTime.Parse(value);
+                        author.YearDeath = DateOnly.Parse(value);
                         break;
                     default:
                         throw new Exception();

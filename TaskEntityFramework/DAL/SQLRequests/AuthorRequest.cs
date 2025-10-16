@@ -20,9 +20,9 @@ namespace TaskEntityFramework.DAL.SQLRequests
                     case "Name":
                         return _db.Author.Where(u => u.Name == whereValue).ToList();
                     case "YearBirth":
-                        return _db.Author.Where(u => u.YearBirth == DateTime.Parse(whereValue)).ToList();
+                        return _db.Author.Where(u => u.YearBirth == DateOnly.Parse(whereValue)).ToList();
                     case "YearDeath":
-                        return _db.Author.Where(u => u.YearDeath == DateTime.Parse(whereValue)).ToList();
+                        return _db.Author.Where(u => u.YearDeath == DateOnly.Parse(whereValue)).ToList();
                     default:
                         return null;
                 }

@@ -52,6 +52,11 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return user;
         }
 
+        public List<User> FindTask(int command, string whereValueFirst = null, string whereValueSecond = null, string whereValueTree = null)
+        {
+            return null;
+        }
+
         public List<User> Join()
         {
             var userJoinNull = _userRequest.Join();

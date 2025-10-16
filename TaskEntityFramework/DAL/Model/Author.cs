@@ -5,7 +5,7 @@ namespace TaskEntityFramework.DAL.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime YearBirth { get; set; }
-        public DateTime YearDeath { get; set; }
+        public DateOnly YearBirth { get; set; }
+        public DateOnly YearDeath { get; set; }
     }
 }

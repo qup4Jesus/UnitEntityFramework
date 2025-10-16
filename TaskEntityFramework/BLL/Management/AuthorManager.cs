@@ -25,9 +25,9 @@ namespace TaskEntityFramework.BLL.Management
             {
                 if (String.IsNullOrEmpty(author.Name))
                     throw new ArgumentNullException();
-                if (!(author.YearBirth is DateTime))
+                if (!(author.YearBirth is DateOnly))
                     throw new ArgumentException();
-                if (!(author.YearDeath is DateTime))
+                if (!(author.YearDeath is DateOnly))
                     throw new ArgumentException();
             }
 

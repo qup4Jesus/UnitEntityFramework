@@ -9,7 +9,7 @@ namespace TaskEntityFramework.DAL.Model.DataTransferObject
         public string Genre { get; set; }
         public int AuthorId { get; set; }
         public string Name { get; set; }
-        public DateTime YearBirth { get; set; }
-        public DateTime YearDeath { get; set; }
+        public DateOnly YearBirth { get; set; }
+        public DateOnly YearDeath { get; set; }
     }
 }

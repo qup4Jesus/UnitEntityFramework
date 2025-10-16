@@ -35,7 +35,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
                 throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(whereValue))
                 throw new ArgumentNullException();
-            if (!DateTime.TryParse(whereValue, out DateTime result))
+            if (!DateOnly.TryParse(whereValue, out DateOnly result))
                 throw new ArgumentException();
 
             return _authorRequest.Find(whereValue, nameColumn);
@@ -49,6 +49,11 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
                 throw new AuthorNotFoundException();
 
             return authorRequest;
+        }
+
+        public List<Author> FindTask(int command, string whereValueFirst = null, string whereValueSecond = null, string whereValueTree = null)
+        {
+            return null;
         }
 
         public List<Author> Join()
