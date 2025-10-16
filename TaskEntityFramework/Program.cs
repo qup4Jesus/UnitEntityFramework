@@ -3,23 +3,14 @@ using TaskEntityFramework.BLL.Management;
 using TaskEntityFramework.DAL;
 using TaskEntityFramework.PLL.View;
 
-var books = new ManagerBook();
-var users = new ManagerUser();
-var description = new ManagerDescriptionBook();
-var author = new ManagerAuthor();
+var books = new BookManager();
+var users = new UserManager();
+var description = new DescriptionBookManager();
+var author = new AuthorManager();
 
-var start = new MainMenuView(books, users, description, author);
+var menu = new MainMenuView(books, users, description, author);
 
 while (true)
 {
-    try
-    {
-        start.Show();
-    }
-    catch (Exception)
-    {
-
-    }
+    menu.Show();
 }
-
-

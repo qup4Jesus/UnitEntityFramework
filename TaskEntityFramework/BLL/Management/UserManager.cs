@@ -1,19 +1,23 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
-    internal class ManagerUser : IManager<User>
+    internal class UserManager : IManager<User, User>
     {
         private UserRepository _manager;
         private UserFactory _factory;
-        public ManagerUser()
+        public IRequestHandler<User, User> RequestHandlers { get; set; }
+        public UserManager()
         {
             _manager = new UserRepository();
             _factory = new UserFactory();
+            RequestHandlers = new UserRequestHandler();
         }
 
         public void Add(List<User> users)
@@ -25,7 +29,7 @@ namespace TaskEntityFramework.BLL.Management
                 if (String.IsNullOrEmpty(user.Email))
                     throw new ArgumentNullException();
                 if (!new EmailAddressAttribute().IsValid(user.Email))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
             }
 
             _manager.Add(users);
@@ -36,7 +40,7 @@ namespace TaskEntityFramework.BLL.Management
             var users = _manager.ReadAll();
 
             if (users.Count == 0)
-                throw new ArgumentNullException();
+                throw new UserNotFoundException();
 
             return users;
         }
@@ -46,7 +50,7 @@ namespace TaskEntityFramework.BLL.Management
             var user = _manager.ReadOne(id);
 
             if (user == null) 
-                throw new ArgumentNullException();
+                throw new UserNotFoundException();
 
             return user;
         }
@@ -56,18 +60,16 @@ namespace TaskEntityFramework.BLL.Management
             var user = _manager.ReadOne(id);
 
             if (user is null)
-                throw new ArgumentNullException();
+                throw new UserNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(user.Name))
-                throw new ArgumentNullException();
-            if (nameColumn != nameof(user.Email))
-                throw new ArgumentNullException();
+            if (nameColumn != nameof(user.Name) && nameColumn != nameof(user.Email))
+                throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
             if (nameColumn == nameof(user.Email))
                 if (!new EmailAddressAttribute().IsValid(value))
-                    throw new ArgumentNullException();
+                    throw new ArgumentException();
 
             _manager.Update(id, nameColumn, value);
         }
@@ -77,7 +79,7 @@ namespace TaskEntityFramework.BLL.Management
             var user = _manager.ReadOne(id);
 
             if (user is null)
-                throw new ArgumentNullException();
+                throw new UserNotFoundException();
 
             _manager.Delete(id);
         }

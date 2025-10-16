@@ -6,12 +6,14 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
-    internal class AddView<T> where T : Table
+    internal class AddView<TEntity, TDto>
+        where TEntity : Table
+        where TDto : Table
     {
-        private IManager<T> _manager;
-        private IEntityFactory<T> _factory;
+        private IManager<TEntity, TDto> _manager;
+        private IEntityFactory<TEntity> _factory;
 
-        public AddView(IManager<T> manager, IEntityFactory<T> factory)
+        public AddView(IManager<TEntity, TDto> manager, IEntityFactory<TEntity> factory)
         {
             _manager = manager;
             _factory = factory;
@@ -19,13 +21,13 @@ namespace TaskEntityFramework.PLL.View
 
         public void Show()
         {
-            SuccessMessages.Show("Добавление нового элемента");
+            SuccessMessages.Show("Добавление нового элемента\n");
 
             Console.WriteLine("Для добавления нового элемента укажите эти данные: ");
 
             switch (_manager)
             {
-                case ManagerUser managerUser:
+                case UserManager managerUser:
 
                     Console.Write("Введите имя : ");
                     string name = Console.ReadLine();
@@ -35,53 +37,88 @@ namespace TaskEntityFramework.PLL.View
 
                     var listElements = new List<string> { name, email };
 
-                    T newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    TEntity newItem = _factory.CreateFromUserInput(listElements);
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerBook managerBook:
+                case BookManager managerBook:
 
                     Console.Write("Введите название : ");
                     string title = Console.ReadLine();
 
-                    Console.Write("Введите дату релиза (В формате YYYY-MM-DD): ");
+                    Console.Write("Введите дату релиза (В формате YYYY-MM-DD) : ");
                     string dateRelease = Console.ReadLine();
 
-                    listElements = new List<string> { title, dateRelease };
+                    Console.WriteLine(
+                        "Введите пользователя книги (id) default = 0 : \n" +
+                        "(Если книга не находится <на рука> ПРОПУСТИТЬ)");
+                    string idUser = Console.ReadLine();
+
+                    List<DescriptionBook> descriptionBooks = new DescriptionBookManager().ReadAll();
+
+                    Console.WriteLine(
+                        $"Количество существующие записей : {descriptionBooks.Count}\n" +
+                        "Для создания новой записи требуется выбрать <0>");
+                    foreach (var descriptionBook in descriptionBooks)
+                    {
+                        Console.WriteLine($"id : {descriptionBook.Id}");
+                    }
+
+                    Console.Write("Введите описание книги (id) : ");
+                    string idDescription = Console.ReadLine();
+
+                    idDescription = new DescriptionBookCreateView().Check(idDescription);
+
+                    listElements = new List<string> { title, dateRelease, idUser, idDescription };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerDescriptionBook managerDescriptionBook:
+                case DescriptionBookManager managerDescriptionBook:
 
                     Console.Write("Введите описание книги : ");
                     string description = Console.ReadLine();
 
                     Console.Write("Введите жанр : ");
                     string genre = Console.ReadLine();
-                    
-                    listElements = new List<string> { description, genre };
+
+                    List<Author> authors = new AuthorManager().ReadAll();
+
+                    Console.WriteLine(
+                        $"Количество существующие записей : {authors.Count}\n" +
+                        "Для создания новой записи требуется выбрать <0>");
+                    foreach (var author in authors)
+                    {
+                        Console.WriteLine($"id : {author.Id}");
+                    }
+
+                    Console.WriteLine("Введите автора (id) : ");
+                    string idAuthor = Console.ReadLine();
+
+                    idAuthor = new AuthorCreateView().Check(idAuthor);
+
+                    listElements = new List<string> { description, genre, idAuthor };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
-                case ManagerAuthor managerAuthor:
+                case AuthorManager managerAuthor:
 
                     Console.Write("Введите имя автора : ");
                     name = Console.ReadLine();
 
-                    Console.Write("Введите годы жизни : ");
+                    Console.Write("Введите годы жизни (В формате YYYY-MM-DD) : ");
                     string dateBirth = Console.ReadLine();
 
-                    Console.Write("Введите годы смерти : ");
+                    Console.Write("Введите годы смерти (В формате YYYY-MM-DD) : ");
                     string dateDeath = Console.ReadLine();
 
                     listElements = new List<string> { name, dateBirth, dateDeath };
 
                     newItem = _factory.CreateFromUserInput(listElements);
-                    _manager.Add(new List<T> { newItem });
+                    _manager.Add(new List<TEntity> { newItem });
 
                     break;
                 default:

@@ -5,10 +5,10 @@ namespace TaskEntityFramework.DAL.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
 
         // Внешний ключ
-        public int UserId { get; set; }
+        public int UserId { get; set; } = 0;
         public int DescriptionBookId { get; set; }
 
         // Навигационное свойство

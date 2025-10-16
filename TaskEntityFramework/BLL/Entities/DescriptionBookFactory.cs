@@ -9,10 +9,14 @@ namespace TaskEntityFramework.BLL.Entities
         {
             if (input is null)
                 throw new ArgumentNullException();
-            if (input.Count > 2)
+            if (input.Count > 3)
                 throw new ArgumentNullException();
+            if (!int.TryParse(input[2], out int result1))
+                throw new ArgumentException();
 
-            return new DescriptionBook { Description = input[0], Genre = input[1] };
+            int idAuthor = int.Parse(input[2]);
+
+            return new DescriptionBook { Description = input[0], Genre = input[1], AuthorId = idAuthor };
         }
     }
 }

@@ -16,8 +16,8 @@ namespace TaskEntityFramework.BLL.Entities
             if (!DateTime.TryParse(input[2], out result))
                 throw new ArgumentNullException();
 
-            DateTime dateBrith = DateTime.Parse(input[1]);
-            DateTime dateDeath = DateTime.Parse(input[2]);
+            DateOnly dateBrith = DateOnly.Parse(input[1]);
+            DateOnly dateDeath = DateOnly.Parse(input[2]);
 
             return new Author { Name = input[0], YearBirth = dateBrith, YearDeath = dateDeath };
         }

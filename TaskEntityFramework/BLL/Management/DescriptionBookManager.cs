@@ -1,18 +1,24 @@
 ﻿
 using TaskEntityFramework.BLL.Entities;
+using TaskEntityFramework.BLL.Exceptions;
+using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
+using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
-    internal class ManagerDescriptionBook : IManager<DescriptionBook>
+    internal class DescriptionBookManager : IManager<DescriptionBook, DescriptionBookAuthorDto>
     {
         private DescriptionBookRepository _manager;
         private DescriptionBookFactory _factory;
-        public ManagerDescriptionBook()
+        public IRequestHandler<DescriptionBook, DescriptionBookAuthorDto> RequestHandlers { get; set; }
+
+        public DescriptionBookManager()
         {
             _manager = new DescriptionBookRepository();
             _factory = new DescriptionBookFactory();
+            RequestHandlers = new DescriptionBookRequestHandler();
         }
 
         public void Add(List<DescriptionBook> listElements)
@@ -33,7 +39,7 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new DescriptionBookNotFoundException();
 
             _manager.Delete(id);
         }
@@ -42,8 +48,8 @@ namespace TaskEntityFramework.BLL.Management
         {
             var books = _manager.ReadAll();
 
-            if (books.Count == 0)
-                throw new ArgumentNullException();
+            //if (books is null)
+            //    throw new DescriptionBookNotFoundException();
 
             return books;
         }
@@ -53,7 +59,7 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new DescriptionBookNotFoundException();
 
             return book;
         }
@@ -63,13 +69,11 @@ namespace TaskEntityFramework.BLL.Management
             var book = _manager.ReadOne(id);
 
             if (book is null)
-                throw new ArgumentNullException();
+                throw new DescriptionBookNotFoundException();
             if (String.IsNullOrEmpty(nameColumn))
                 throw new ArgumentNullException();
-            if (nameColumn != nameof(book.Description))
-                throw new ArgumentNullException();
-            if (nameColumn != nameof(book.Genre))
-                throw new ArgumentNullException();
+            if (nameColumn != nameof(book.Description) && nameColumn != nameof(book.Genre))
+                throw new ColumnNotFoundException();
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
 

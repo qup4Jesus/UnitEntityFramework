@@ -34,22 +34,31 @@ namespace UnitEntityFramework.DAL.SQLRequest
 
         public override User FindFirst()
         {
-            return _db.Users.First();
+            using (_db)
+            {
+                return _db.Users.First();
+            }  
         }
 
         public override List<UserCompanyDto> Join(Table table)
         {
-            return _db.Users
-                .Join(_db.Companies, 
-                    c => c.CompanyId, 
-                    u => u.Id, 
-                    (u,c) => new UserCompanyDto { CompanyName = c.Name } ).ToList();
+            using (_db)
+            {
+                return _db.Users
+                    .Join(_db.Companies,
+                        c => c.CompanyId,
+                        u => u.Id,
+                        (u, c) => new UserCompanyDto { CompanyName = c.Name }).ToList();
 
+            }
         }
 
         public override int Sum()
         {
-            return _db.Users.Sum(u => u.Id);
+            using (_db)
+            {
+                return _db.Users.Sum(u => u.Id);
+            }
         }
     }
 }

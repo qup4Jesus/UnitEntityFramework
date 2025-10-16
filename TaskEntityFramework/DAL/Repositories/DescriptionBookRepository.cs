@@ -7,11 +7,9 @@ namespace TaskEntityFramework.DAL.Repositories
 {
     internal class DescriptionBookRepository : AbstractRepository<DescriptionBook>
     {
-        public DescriptionBookRepository() : base() { }
-
         public override void Add(List<DescriptionBook> newElements)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 _db.AddRange(newElements);
 
@@ -21,7 +19,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Delete(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 var descriptionBook = _db.DescriptionBooks.Find(id);
 
@@ -33,7 +31,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override List<DescriptionBook> ReadAll()
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 return _db.DescriptionBooks.ToList();
             }
@@ -41,7 +39,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override DescriptionBook ReadOne(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 return _db.DescriptionBooks.Find(id);
             }
@@ -49,7 +47,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Update(int id, string nameColumn, string value)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 var descriptionBook = _db.DescriptionBooks.Find(id);
 

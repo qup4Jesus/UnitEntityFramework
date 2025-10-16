@@ -5,11 +5,9 @@ namespace TaskEntityFramework.DAL.Repositories
 {
     internal class UserRepository : AbstractRepository<User>
     {
-        public UserRepository() : base() { }
-
         public override void Add(List<User> newUsers)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 foreach (var user in newUsers)
                 {
@@ -24,7 +22,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Delete(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Удаление конкретного пользователя по Id
                 var user = _db.Users.Find(id);
@@ -39,7 +37,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override List<User> ReadAll()
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Получение всех существующих пользователей в БД
                 return _db.Users.ToList();
@@ -48,7 +46,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override User ReadOne(int id)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Конкретного пользователя по Id
                 var user = _db.Users.Find(id);
@@ -59,7 +57,7 @@ namespace TaskEntityFramework.DAL.Repositories
 
         public override void Update(int id, string nameColumn, string value)
         {
-            using (_db)
+            using (_db = new MyAppContext())
             {
                 // Изменение пользователя по его Id
                 var user = _db.Users.Find(id);
