@@ -6,8 +6,13 @@ using TaskEntityFramework.DAL.SQLRequests;
 
 namespace TaskEntityFramework.BLL.Management.RequestHandlers
 {
+    /// <summary>
+    /// Данный класс предназначен для реализации обьекта обработчик запросов (RequestHandler) 
+    /// работающего с запросами (Request => BookRequest)
+    /// </summary>
     internal class BookRequestHandler : IRequestHandler<Book, BookUserDto>
     {
+        // Данное свойство отвечает за объект взаимодействия с БД.
         private BookRequest _bookRequest;
 
         public BookRequestHandler()
@@ -15,6 +20,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             _bookRequest = new BookRequest();
         }
 
+        // Данный метод проверяет на пустоту получаемый обьект (Book) по индентификатору.
         public List<Book> Find(int whereValue)
         {
             var book = _bookRequest.Find(whereValue);
@@ -25,6 +31,8 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return book;
         }
 
+        // Данный метод предначзначен для проверки строковых (string) значений, где столбец по 
+        // по которому происходит поиск = nameColumn, а значение требуемое найти = whereValue.
         public List<Book> Find(string whereValue, string nameColumn)
         {
             if (String.IsNullOrEmpty(nameColumn))
@@ -40,7 +48,16 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return _bookRequest.Find(whereValue, nameColumn);
         }
 
-        public List<Book> FindTask(int command, string whereValueFirst = null, string whereValueSecond = null, string whereValueTree = null)
+        // Данный метод предназначен для проверки строковых (string) значений для сложных запросов,
+        // где command - это целочисленное значение (int) отвечающее за выполняемую команду в запросе,
+        // значение первого условия = whereValueFirst , значение второго условия = whereValueSecond ,
+        // значение третьего условия = whereValueTree, все они при отсутвии передаваемых значений могут 
+        // быть пустыми (null).
+        public List<Book> FindTask(
+            int command, 
+            string whereValueFirst = null, 
+            string whereValueSecond = null, 
+            string whereValueTree = null)
         {
             if (String.IsNullOrEmpty(whereValueFirst))
                 throw new ArgumentNullException();
@@ -87,6 +104,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             
         }
 
+        // Данный метод предназначен для проверки получаемого обьекта на пустоту. 
         public Book FindFirst()
         {
             var book = _bookRequest.FindFirst();
@@ -97,6 +115,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return book;
         }
 
+        // Данный метод предназначен для проверки получаемого обьекта на пустоту.
         public List<BookUserDto> Join()
         {
             var bookJoinUser = _bookRequest.Join();
@@ -107,6 +126,7 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return bookJoinUser;
         }
 
+        // Данный метод предназначен для проверки получаемого обьекта на пустоту.
         public List<BookDescriptionBookDto> Join(string joinTable)
         {
             var bookJoinDescriptionBook = _bookRequest.Join(joinTable);
@@ -117,11 +137,15 @@ namespace TaskEntityFramework.BLL.Management.RequestHandlers
             return bookJoinDescriptionBook;
         }
 
+        // Данный метод предназначен для проврки получаемиого целочисленого (int) значения.
         public int Sum()
         {
             return _bookRequest.Sum();
         }
 
+        // Данный вспомогательный метод предназначен для более удобной и компактной проверки
+        // строкового (string) значения nameColumn на соответвтие существующим столбцам в классе
+        // Book включая (Join) обьединения.
         public int Check(string nameColumn)
         {
             var listNameColumn = new List<string> {

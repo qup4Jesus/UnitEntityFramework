@@ -1,8 +1,11 @@
-﻿using TaskEntityFramework.BLL.Exceptions;
+﻿
 using TaskEntityFramework.DAL.Model;
 
 namespace TaskEntityFramework.DAL.Repositories
 {
+    /// <summary>
+    /// Данный класс предназначен для работы непосредственно с БД для сущности Book
+    /// </summary>
     internal class BookRepository : AbstractRepository<Book>
     {
         public override void Add(List<Book> newBooks)
@@ -48,7 +51,7 @@ namespace TaskEntityFramework.DAL.Repositories
         {
             using (_db = new MyAppContext())
             {
-                // Конкретную книгу по Id
+                // Получение конкретной книги по Id
                 var book = _db.Books.Find(id);
 
                 return book;
@@ -64,13 +67,16 @@ namespace TaskEntityFramework.DAL.Repositories
 
                 switch (nameColumn)
                 {
+                    // Изменение названия книги
                     case nameof(book.Name):
                         book.Name = value;
                         break;
+                    // Изменение даты релиза
                     case nameof(book.ReleaseDate):
                         var date = DateOnly.Parse(value);
                         book.ReleaseDate = date;
                         break;
+                    // При не соответствии Error
                     default:
                         throw new Exception();
                 }

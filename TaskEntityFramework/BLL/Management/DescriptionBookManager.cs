@@ -8,19 +8,33 @@ using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
+    /// <summary>
+    /// Данный класс предназначен для реализации обьекта менеджера (Manager) работающего
+    /// с хранилищем (Repository => DescriptionBookRepository) .
+    /// </summary>
     internal class DescriptionBookManager : IManager<DescriptionBook, DescriptionBookAuthorDto>
     {
-        private DescriptionBookRepository _manager;
-        private DescriptionBookFactory _factory;
+        // Данное свойство отвечает за объект (хранилище) который общается с БД.
+        private DescriptionBookRepository _repository;
+
+        // Данное свойство отвечает за объект (фабрику-сборщик) который собирает коллекцию
+        // обьектов (DescriptionBook).
+        public IEntityFactory<DescriptionBook> _factory { get; set; }
+
+        // Данное свойство отвечает за объект (обработчик запросов) которые выполняет 
+        // проверки данных для работы с запросами.
         public IRequestHandler<DescriptionBook, DescriptionBookAuthorDto> RequestHandlers { get; set; }
 
         public DescriptionBookManager()
         {
-            _manager = new DescriptionBookRepository();
+            _repository = new DescriptionBookRepository();
             _factory = new DescriptionBookFactory();
             RequestHandlers = new DescriptionBookRequestHandler();
         }
 
+        // Данный метод получет на вход список сгенерированных фабрикой (DescriprionBookFactory)
+        // описания книги (DescriptionBook) и проверяет каждого на соответствие данных критериям.
+        // В случае несоответствия критериям выходит исключение.
         public void Add(List<DescriptionBook> listElements)
         {
             foreach (var book in listElements)
@@ -31,22 +45,25 @@ namespace TaskEntityFramework.BLL.Management
                     throw new ArgumentNullException();
             }
 
-            _manager.Add(listElements);
+            _repository.Add(listElements);
         }
 
+        // Данный метод удаляет конкретную запись описания книги по индентификатору.
+        // В случае пустоты записи выходит исклюение.
         public void Delete(int id)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new DescriptionBookNotFoundException();
 
-            _manager.Delete(id);
+            _repository.Delete(id);
         }
 
+        // Данный метод возвращает список всех записей описания книги находящихся в БД.
         public List<DescriptionBook> ReadAll()
         {
-            var books = _manager.ReadAll();
+            var books = _repository.ReadAll();
 
             //if (books is null)
             //    throw new DescriptionBookNotFoundException();
@@ -54,9 +71,11 @@ namespace TaskEntityFramework.BLL.Management
             return books;
         }
 
+        // Данный метод возвращает конкретную запись описания книги по его индентификатору.
+        // В случае пустоты получаемой записи выходит исключение.
         public DescriptionBook ReadOne(int id)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new DescriptionBookNotFoundException();
@@ -64,9 +83,13 @@ namespace TaskEntityFramework.BLL.Management
             return book;
         }
 
+        // Данный метод получает на вход данные для изменения записи описания книги по
+        // индентификатору = id, проверяет существование записи, корректности данных 
+        // столбец = nameColumn , значение = value. В случае несоответсвия данных 
+        // требования выходит ошибка.
         public void Update(int id, string nameColumn, string value)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new DescriptionBookNotFoundException();
@@ -77,12 +100,7 @@ namespace TaskEntityFramework.BLL.Management
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
 
-            _manager.Update(id, nameColumn, value);
-        }
-
-        public IEntityFactory<DescriptionBook> GetFactory()
-        {
-            return _factory;
+            _repository.Update(id, nameColumn, value);
         }
     }
 }

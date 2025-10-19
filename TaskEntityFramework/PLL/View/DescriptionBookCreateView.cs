@@ -6,6 +6,10 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс руководит за дополнительное создание объекта при инциализации нового Описания книги (DescriptionBook) -
+    /// конкретная реализация находится по пути .../PLL/View/AddView строка 68.
+    /// </summary>
     internal class DescriptionBookCreateView
     {
         private DescriptionBookManager _manager;
@@ -17,13 +21,16 @@ namespace TaskEntityFramework.PLL.View
             _factory = new DescriptionBookFactory();
         }
 
+        // Меню проверки.
         public string Check(string descriptionId)
         {
             if (int.TryParse(descriptionId, out int result))
             {
                 if (int.Parse(descriptionId) == 0)
                 {
-                    AlertMessages.Show("Для создания книги требуется создать её описание!\n");
+                    SuccessMessages.Show(
+                        "\n" +
+                        "Для создания книги требуется создать её описание!\n");
                     Console.Write("Введите описание книги : ");
                     string description = Console.ReadLine();
 
@@ -33,6 +40,7 @@ namespace TaskEntityFramework.PLL.View
                     List<Author> authors = new AuthorManager().ReadAll();
 
                     Console.WriteLine(
+                        $"\n" +
                         $"Количество существующие записей : {authors.Count}\n" +
                         "Для создания новой записи требуется выбрать <0>");
                     foreach (var author in authors)

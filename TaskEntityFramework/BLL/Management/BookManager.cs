@@ -8,18 +8,33 @@ using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
+    /// <summary>
+    /// Данный класс предназначен для реализации обьекта менеджера (Manager) работающего
+    /// с хранилищем (Repository => BookRepository) .
+    /// </summary>
     internal class BookManager : IManager<Book, BookUserDto>
     {
-        private BookRepository _manager;
-        private BookFactory _factory;
+        // Данное свойство отвечает за объект (хранилище) который общается с БД.
+        private BookRepository _repository;
+
+        // Данное свойство отвечает за объект (фабрику-сборщик) который собирает коллекцию
+        // обьектов (Book).
+        public IEntityFactory<Book> _factory { get; set; }
+
+        // Данное свойство отвечает за объект (обработчик запросов) которые выполняет 
+        // проверки данных для работы с запросами.
         public IRequestHandler<Book, BookUserDto> RequestHandlers { get; set; }
+
         public BookManager()
         {
-            _manager = new BookRepository();
+            _repository = new BookRepository();
             _factory = new BookFactory();
             RequestHandlers = new BookRequestHandler();
         }
 
+        // Данный метод получет на вход список сгенерированных фабрикой (BookFactory)
+        // книг (Book) и проверяет каждого на соответствие данных критериям.
+        // В случае несоответствия критериям выходит исключение.
         public void Add(List<Book> books)
         {
             foreach (var book in books)
@@ -30,12 +45,14 @@ namespace TaskEntityFramework.BLL.Management
                     throw new ArgumentException();
             }
 
-            _manager.Add(books);
+            _repository.Add(books);
         }
 
+        // Данный метод возвращает список всех записей книг находящихся в БД.
+        // В случае пустоты получаемого списка выходит исключение.
         public List<Book> ReadAll()
         {
-            var books = _manager.ReadAll();
+            var books = _repository.ReadAll();
 
             if (books is null)
                 throw new BookNotFoundException();
@@ -43,9 +60,12 @@ namespace TaskEntityFramework.BLL.Management
             return books;
         }
 
+
+        // Данный метод возвращает конкретную запись книги по его индентификатору.
+        // В случае пустоты получаемой записи выходит исключение.
         public Book ReadOne(int id)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new BookNotFoundException();
@@ -53,9 +73,13 @@ namespace TaskEntityFramework.BLL.Management
             return book;
         }
 
+        // Данный метод получает на вход данные для изменения записи книги по
+        // индентификатору = id, проверяет существование записи, корректности данных 
+        // столбец = nameColumn , значение = value. В случае несоответсвия данных 
+        // требования выходит ошибка.
         public void Update(int id, string nameColumn, string value)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new BookNotFoundException();
@@ -69,22 +93,19 @@ namespace TaskEntityFramework.BLL.Management
                 if (!DateOnly.TryParse(value, out DateOnly result))
                     throw new ArgumentException();
 
-            _manager.Update(id, nameColumn, value);
+            _repository.Update(id, nameColumn, value);
         }
 
+        // Данный метод удаляет конкретную запись книги по индентификатору. В случае
+        // пустоты записи выходит исклюение.
         public void Delete(int id)
         {
-            var book = _manager.ReadOne(id);
+            var book = _repository.ReadOne(id);
 
             if (book is null)
                 throw new BookNotFoundException();
 
-            _manager.Delete(id);
-        }
-
-        public IEntityFactory<Book> GetFactory()
-        {
-            return _factory;
+            _repository.Delete(id);
         }
     }
 }

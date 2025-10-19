@@ -5,6 +5,13 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс отвечает за ввывод в консоль данных. Меню чтения записей.
+    /// </summary>
+    /// <typeparam name="TEntity"> Данный параметр использует сущность Table для универсальной
+    /// работы </typeparam>
+    /// <typeparam name="TDto"> Данный параметр использует сущность DateTransferObject для 
+    /// универсальной работы </typeparam>
     internal class UpdateView<TEntity, TDto>
         where TEntity : Table
         where TDto : Table
@@ -16,8 +23,11 @@ namespace TaskEntityFramework.PLL.View
             _manager = manager;
         }
 
+        // Меню обновления записи.
         public void Show()
         {
+            Console.Clear();
+
             SuccessMessages.Show("Обновление элемента : ");
 
             Console.Write("Укажите ID изменяемого объекта : ");

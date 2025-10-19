@@ -8,18 +8,33 @@ using TaskEntityFramework.DAL.Repositories;
 
 namespace TaskEntityFramework.BLL.Management
 {
+    /// <summary>
+    /// Данный класс предназначен для реализации обьекта менеджера (Manager) работающего
+    /// с хранилищем (Repository => UserRepository) .
+    /// </summary>
     internal class UserManager : IManager<User, User>
     {
-        private UserRepository _manager;
-        private UserFactory _factory;
+        // Данное свойство отвечает за объект (хранилище) который общается с БД.
+        private UserRepository _repository;
+
+        // Данное свойство отвечает за объект (фабрику-сборщик) который собирает коллекцию
+        // обьектов (User).
+        public IEntityFactory<User> _factory { get; set; }
+
+        // Данное свойство отвечает за объект (обработчик запросов) которые выполняет 
+        // проверки данных для работы с запросами.
         public IRequestHandler<User, User> RequestHandlers { get; set; }
+
         public UserManager()
         {
-            _manager = new UserRepository();
+            _repository = new UserRepository();
             _factory = new UserFactory();
             RequestHandlers = new UserRequestHandler();
         }
 
+        // Данный метод получет на вход список сгенерированных фабрикой (UserFactory)
+        // пользователей (User) и проверяет каждого на соответствие данных критериям.
+        // В случае несоответствия критериям выходит исключение.
         public void Add(List<User> users)
         {
             foreach (var user in users)
@@ -32,12 +47,14 @@ namespace TaskEntityFramework.BLL.Management
                     throw new ArgumentException();
             }
 
-            _manager.Add(users);
+            _repository.Add(users);
         }
 
+        // Данный метод возвращает список всех записей пользователей находящихся в БД.
+        // В случае пустоты получаемого списка выходит исключение.
         public List<User> ReadAll()
         {
-            var users = _manager.ReadAll();
+            var users = _repository.ReadAll();
 
             if (users.Count == 0)
                 throw new UserNotFoundException();
@@ -45,9 +62,11 @@ namespace TaskEntityFramework.BLL.Management
             return users;
         }
 
+        // Данный метод возвращает конкретную запись пользователя по индентификатору.
+        // В случае пустоты получаемой записи выходит исключение.
         public User ReadOne(int id)
         {
-            var user = _manager.ReadOne(id);
+            var user = _repository.ReadOne(id);
 
             if (user == null) 
                 throw new UserNotFoundException();
@@ -55,9 +74,13 @@ namespace TaskEntityFramework.BLL.Management
             return user;
         }
 
+        // Данный метод получает на вход данные для изменения записи пользователя по
+        // индентификатору = id, проверяет существование записи, корректности данных 
+        // столбец = nameColumn , значение = value. В случае несоответсвия данных 
+        // требования выходит ошибка.
         public void Update(int id, string nameColumn, string value)
         {
-            var user = _manager.ReadOne(id);
+            var user = _repository.ReadOne(id);
 
             if (user is null)
                 throw new UserNotFoundException();
@@ -71,22 +94,19 @@ namespace TaskEntityFramework.BLL.Management
                 if (!new EmailAddressAttribute().IsValid(value))
                     throw new ArgumentException();
 
-            _manager.Update(id, nameColumn, value);
+            _repository.Update(id, nameColumn, value);
         }
 
+        // Данный метод удаляет конкретную запись пользователя по индентификатору.
+        // В случае пустоты записи выходит исклюение.
         public void Delete(int id)
         {
-            var user = _manager.ReadOne(id);
+            var user = _repository.ReadOne(id);
 
             if (user is null)
                 throw new UserNotFoundException();
 
-            _manager.Delete(id);
-        }
-
-        public IEntityFactory<User> GetFactory()
-        {
-            return _factory;
+            _repository.Delete(id);
         }
     }
 }

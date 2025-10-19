@@ -6,11 +6,21 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс отвечает за ввывод в консоль данных. Меню добавления записей.
+    /// </summary>
+    /// <typeparam name="TEntity"> Данный параметр использует сущность Table для универсальной
+    /// работы </typeparam>
+    /// <typeparam name="TDto"> Данный параметр использует сущность DateTransferObject для 
+    /// универсальной работы </typeparam>
     internal class AddView<TEntity, TDto>
         where TEntity : Table
         where TDto : Table
     {
+        // Данное свойство отвечает за обьект работающий с данными в БД.
         private IManager<TEntity, TDto> _manager;
+
+        // Данное свойство отвечает за фабрику-сборщик обьекта для работы с ним.
         private IEntityFactory<TEntity> _factory;
 
         public AddView(IManager<TEntity, TDto> manager, IEntityFactory<TEntity> factory)
@@ -19,8 +29,11 @@ namespace TaskEntityFramework.PLL.View
             _factory = factory;
         }
 
+        // Меню добавления записи.
         public void Show()
         {
+            Console.Clear();
+
             SuccessMessages.Show("Добавление нового элемента\n");
 
             Console.WriteLine("Для добавления нового элемента укажите эти данные: ");
@@ -49,22 +62,23 @@ namespace TaskEntityFramework.PLL.View
                     Console.Write("Введите дату релиза (В формате YYYY-MM-DD) : ");
                     string dateRelease = Console.ReadLine();
 
-                    Console.WriteLine(
-                        "Введите пользователя книги (id) default = 0 : \n" +
-                        "(Если книга не находится <на рука> ПРОПУСТИТЬ)");
+                    Console.Write("Введите пользователя книги (id): ");
                     string idUser = Console.ReadLine();
 
                     List<DescriptionBook> descriptionBooks = new DescriptionBookManager().ReadAll();
 
                     Console.WriteLine(
+                        $"\n" +
                         $"Количество существующие записей : {descriptionBooks.Count}\n" +
                         "Для создания новой записи требуется выбрать <0>");
                     foreach (var descriptionBook in descriptionBooks)
                     {
-                        Console.WriteLine($"id : {descriptionBook.Id}");
+                        Console.Write($"id : {descriptionBook.Id}\t");
                     }
 
-                    Console.Write("Введите описание книги (id) : ");
+                    Console.Write(
+                        "\n" +
+                        "Введите описание книги (id) : ");
                     string idDescription = Console.ReadLine();
 
                     idDescription = new DescriptionBookCreateView().Check(idDescription);
@@ -90,10 +104,12 @@ namespace TaskEntityFramework.PLL.View
                         "Для создания новой записи требуется выбрать <0>");
                     foreach (var author in authors)
                     {
-                        Console.WriteLine($"id : {author.Id}");
+                        Console.Write($"id : {author.Id}\t ");
                     }
 
-                    Console.WriteLine("Введите автора (id) : ");
+                    Console.Write(
+                        "\n" +
+                        "Введите автора (id) : ");
                     string idAuthor = Console.ReadLine();
 
                     idAuthor = new AuthorCreateView().Check(idAuthor);

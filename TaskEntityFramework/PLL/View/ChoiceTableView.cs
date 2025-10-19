@@ -7,11 +7,21 @@ using TaskEntityFramework.BLL.Exceptions;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс отвечает за ввывод в консоль данных. Меню работы с данными.
+    /// </summary>
+    /// <typeparam name="TEntity"> Данный параметр использует сущность Table для универсальной
+    /// работы </typeparam>
+    /// <typeparam name="TDto"> Данный параметр использует сущность DateTransferObject для 
+    /// универсальной работы </typeparam>
     internal class ChoiceTableView<TEntity, TDto>
         where TEntity : Table
         where TDto : Table
     {
+        // Данное свойство отвечает за обьект работающий с данными в БД.
         private IManager<TEntity, TDto> _manager;
+
+        // Данное свойство отвечает за фабрику-сборщик обьекта для работы с ним.
         private IEntityFactory<TEntity> _entityFactory;
 
         public ChoiceTableView(IManager<TEntity, TDto> manager)
@@ -20,6 +30,7 @@ namespace TaskEntityFramework.PLL.View
             _entityFactory = _manager.GetFactory();
         }
 
+        // Меню работы с данными.
         public void Show()
         {
             while (true)
@@ -32,7 +43,7 @@ namespace TaskEntityFramework.PLL.View
                     $"{nameof(Commands.read)} : просмотреть пользователей\n" +
                     $"{nameof(Commands.update)} : обновить пользователя\n" +
                     $"{nameof(Commands.delete)} : удалить пользователя\n" +
-                    $"<-- Назад <<<");
+                    $"<-- back <<<");
 
                 try
                 {
@@ -50,7 +61,7 @@ namespace TaskEntityFramework.PLL.View
                         case nameof(Commands.delete):
                             new DeleteView<TEntity, TDto>(_manager).Show();
                             break;
-                        case "назад":
+                        case "back":
                             return;
                         default:
                             AlertMessages.Show("Неверно выбранный пункт меню");
@@ -92,12 +103,15 @@ namespace TaskEntityFramework.PLL.View
                         $"Подробности : {ex.InnerException?.Message}");
                 }
 
-                Console.WriteLine("Нажмите любую клавишу, чтобы продолжить...");
+                Console.WriteLine(
+                    "\n" +
+                    "Нажмите любую клавишу, чтобы продолжить...");
                 Console.ReadKey();
                 Console.Clear();
             }
         }
 
+        // Список команд
         public enum Commands
         {
             create,

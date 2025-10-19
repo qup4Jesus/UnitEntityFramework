@@ -6,14 +6,22 @@ using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс отвечат за вывод в консоль данных. Главное меню.
+    /// </summary>
     internal class MainMenuView
     {
+        // Данные свойства отвечают за работу с данными для каждой кокретной таблицы.
         private BookManager _books;
         private UserManager _users;
         private DescriptionBookManager _description;
         private AuthorManager _author;
 
-        public MainMenuView(BookManager books, UserManager users, DescriptionBookManager descriptionBook, AuthorManager author)
+        public MainMenuView(
+            BookManager books, 
+            UserManager users, 
+            DescriptionBookManager descriptionBook, 
+            AuthorManager author)
         {
             _books = books;
             _users = users;
@@ -21,6 +29,7 @@ namespace TaskEntityFramework.PLL.View
             _author = author;
         }
 
+        // Главного меню
         public void Show()
         {
             while (true)

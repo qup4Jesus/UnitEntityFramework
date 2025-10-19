@@ -1,8 +1,11 @@
-﻿using TaskEntityFramework.BLL.Exceptions;
+﻿
 using TaskEntityFramework.DAL.Model;
 
 namespace TaskEntityFramework.DAL.Repositories
 {
+    /// <summary>
+    /// Данный класс предназначен для работы непосредственно с БД для сущности Users
+    /// </summary>
     internal class UserRepository : AbstractRepository<User>
     {
         public override void Add(List<User> newUsers)
@@ -64,12 +67,15 @@ namespace TaskEntityFramework.DAL.Repositories
 
                 switch (nameColumn)
                 {
+                    // Изменение имени пользователя 
                     case nameof(user.Name):
                         user.Name = value;
                         break;
+                    // Изменение email пользователя
                     case nameof(user.Email):
                         user.Email = value;
                         break;
+                    // При не соответствии Error
                     default:
                         throw new Exception();
                 }

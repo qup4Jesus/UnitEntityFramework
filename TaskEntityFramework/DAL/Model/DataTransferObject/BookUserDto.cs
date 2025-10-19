@@ -1,6 +1,17 @@
 ﻿
 namespace TaskEntityFramework.DAL.Model.DataTransferObject
 {
+    /// <summary>
+    /// Данная модель является отображением Join двух таблиц (Book) и (User)
+    /// <Id> Индентификатор </Id>
+    /// <BookId> Индентификатор книги </BookId>
+    /// <BookName> Название книги </BookName>
+    /// <ReleaseDate> Дата выхода книги </ReleaseDate>
+    /// <UserId> Индентификатор пользователя </UserId>
+    /// <UserName> Имя пользователя </UserName>
+    /// <Email> Email пользователя </Email>
+    /// <DescriptionBookId> Индентификатор описания книги </DescriptionBookId>
+    /// </summary>
     internal class BookUserDto : Table
     {
         public int Id { get; set; }

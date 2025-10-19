@@ -1,13 +1,18 @@
 ﻿
-using System.Threading.Channels;
 using TaskEntityFramework.BLL.Management;
-using TaskEntityFramework.BLL.Management.RequestHandlers;
 using TaskEntityFramework.DAL.Model;
 using TaskEntityFramework.DAL.Model.DataTransferObject;
 using TaskEntityFramework.PLL.Helpers;
 
 namespace TaskEntityFramework.PLL.View
 {
+    /// <summary>
+    /// Данный класс отвечает за ввывод в консоль данных. Меню чтения записей.
+    /// </summary>
+    /// <typeparam name="TEntity"> Данный параметр использует сущность Table для универсальной
+    /// работы </typeparam>
+    /// <typeparam name="TDto"> Данный параметр использует сущность DateTransferObject для 
+    /// универсальной работы </typeparam>
     internal class ReadView<TEntity, TDto>
         where TEntity : Table
         where TDto : Table
@@ -19,13 +24,16 @@ namespace TaskEntityFramework.PLL.View
             _manager = manager;
         }
 
+        // Меню чтения записей.
         public void Show()
         {
             while (true)
             {
+                Console.Clear();
+
                 SuccessMessages.Show("Просмотр записей");
 
-                Console.WriteLine("Выберите показ пользователей : \n" +
+                Console.WriteLine("Выберите нужный пункт меню : \n" +
                     "1 - Показать все записи\n" +
                     "2 - Показать конкретную запись по ID\n" +
                     "3 - Показать записи по условию\n" +
@@ -33,9 +41,9 @@ namespace TaskEntityFramework.PLL.View
                     "5 - Показать первую запись в таблице\n" +
                     "6 - Показать объединенные таблицы\n" +
                     "7 - Показать сумму ID (???)\n" +
-                    "<-- Назад <<<");
+                    "<-- back <<<");
 
-                switch (Console.ReadLine())
+                switch (Console.ReadLine().ToLower())
                 {
                     case "1":
                         ShowAllRecords();
@@ -58,7 +66,7 @@ namespace TaskEntityFramework.PLL.View
                     case "7":
                         ShowRecordSum();
                         break;
-                    case "назад":
+                    case "back":
                         return;
                     default:
                         AlertMessages.Show("Введено не корректное значение!");
@@ -71,6 +79,7 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для вывода всех существующих записей конкретной таблицы.
         private void ShowAllRecords()
         {
             List<TEntity> listElem = _manager.ReadAll();
@@ -111,6 +120,7 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для вывода конкретной записи по индентификатору в таблице.
         private void ShowRecordById()
         {
             Console.Write("Введите id: ");
@@ -153,13 +163,14 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для показа записи в зависимости от условия.
         private void ShowRecordByWhere()
         {
             Console.Write("Введите столбец по которому нужно произвести поиск: ");
-            string nameColumn = Console.ReadLine();
+            string nameColumn = Console.ReadLine().ToLower();
 
             Console.Write("Введите значение по которому нужно произвести поиск: ");
-            string whereValue = Console.ReadLine();
+            string whereValue = Console.ReadLine().ToLower();
 
             List<TEntity> record = _manager.RequestHandlers.Find(whereValue, nameColumn);
 
@@ -208,6 +219,7 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для показа первой записи в таблицу.
         private void ShowRecordFirst()
         {
             switch (_manager.RequestHandlers.FindFirst())
@@ -248,6 +260,7 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для показа обьеденения таблиц.
         private void ShowRecordJoin()
         {
             switch (_manager.RequestHandlers.Join())
@@ -303,11 +316,13 @@ namespace TaskEntityFramework.PLL.View
             }
         }
 
+        // Метод для показа суммы целочисленых (int) столбцов
         private void ShowRecordSum()
         {
             Console.WriteLine($"Сумма id-шников : {_manager.RequestHandlers.Sum()}");
         }
 
+        // Метод для показа сложных условий.
         private void ShowRecordByTaskWhere()
         {
             switch (_manager.RequestHandlers.FindFirst())
@@ -316,6 +331,8 @@ namespace TaskEntityFramework.PLL.View
                     AlertMessages.Show("❌❌❌ Пока не придумано ❌❌❌");
                     break;
                 case Book book:
+
+                    Console.Clear();
 
                     Console.WriteLine(
                         "Выберете один из запросов:\n" +

@@ -4,8 +4,12 @@ using TaskEntityFramework.DAL.Model.DataTransferObject;
 
 namespace TaskEntityFramework.DAL.SQLRequests
 {
+    /// <summary>
+    /// Данный класс предназначен для выполнения запрососв к БД (сущность DescriptionBook).
+    /// </summary>
     internal class DescriptionBookRequest : Requests<DescriptionBook, DescriptionBookAuthorDto>
     {
+        // Выполняем запрос по поиску описания книг у которых Id = whereValue.
         public override List<DescriptionBook> Find(int whereValue)
         {
             return _db.DescriptionBooks.Where(u => u.Id == whereValue).ToList();
@@ -13,12 +17,17 @@ namespace TaskEntityFramework.DAL.SQLRequests
 
         public override List<DescriptionBook> Find(string whereValue, string nameColumn)
         {
+            // Выполняем запрос по поиску книг, где столбец равен nameColumn, 
+            // а искомое значение равно whereValue.
             switch (nameColumn)
             {
-                case "Description":
+                // По столбцу "Description".
+                case "description":
                     return _db.DescriptionBooks.Where(u => u.Description == whereValue).ToList();
-                case "Genre":
+                // По столбцу "Genre".
+                case "genre":
                     return _db.DescriptionBooks.Where(u => u.Genre == whereValue).ToList();
+                // Иначе вернется null.
                 default:
                     return null;
             }
@@ -26,11 +35,14 @@ namespace TaskEntityFramework.DAL.SQLRequests
 
         public override DescriptionBook FindFirst()
         {
+            // Выполняем запрос на получение описания книги находящейся первой в таблице.
             return _db.DescriptionBooks.First();
         }
 
         public override List<DescriptionBookAuthorDto> Join()
         {
+            // Выполняем запрос на получение списка обьединения (Join) таблиц Описание книги
+            // (DescriptonBook) и Пользователь (Author), возвращаем все взаимосвязанные значения.
             return _db.DescriptionBooks
                 .Join(_db.Author,
                     db => db.AuthorId,
@@ -49,6 +61,7 @@ namespace TaskEntityFramework.DAL.SQLRequests
 
         public override int Sum()
         {
+            // Выполняем запрос на получение суммы индентификаторов.
             return _db.DescriptionBooks.Sum(u => u.Id);
         }
     }
